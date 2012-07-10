@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cxf="http://cxf.apache.org/core"
+  xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+  default-lazy-init="true">
+
+  <description>Apache CXF Web Service服务端配置</description>
+
+  <import resource="classpath:META-INF/cxf/cxf.xml" />
+  <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+  <!--
+  <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+  -->
+  
+  <!--
+    <bean id="serverPasswordCallback" class="org.ssh.pm.common.webservice.rs.server.ServerPasswordCallback" />
+    -->
+  <!--  
+  <cxf:bus>
+    <cxf:outInterceptors>
+      <ref bean="basicAuthenticationHeaderGenerator" />
+    </cxf:outInterceptors>
+  </cxf:bus>
+  -->
+      
+  <!-- jax-ws endpoint定义  -->
+  <jaxws:endpoint id="userService" address="/UserService">
+    <jaxws:implementor ref="userWebService" /> 
+    
+    <!--
+      <jaxws:inInterceptors>  
+        <bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+        -->  
+    <!-- SAAJInInterceptor只在CXF是2.0.X版本时或之前版本时才是必须的 -->  
+    <!-- <bean class="org.apache.cxf.binding.soap.saaj.SAAJInInterceptor"/> -->  
+      
+    <!--<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">  
+      <constructor-arg>  
+        <map>  
+          <entry key="action" value="UsernameToken" />  
+          <entry key="passwordType" value="PasswordText" />  
+          <entry key="user" value="FHDServer" />  
+          <entry key="passwordCallbackRef">  
+            <ref bean="serverPasswordCallback" />  
+          </entry>  
+        </map>-->
+    <!--   
+          action:                 UsernameToken               指使用用户名令牌   
+          passwordType:           PasswordText                指密码加密策略，这里直接文本   
+          user:                   FHDServer                   指别名   
+          passwordCallBackRef:    serverPasswordCallback      指消息验证   
+      -->    
+    <!--</constructor-arg>  
+        </bean>  
+      </jaxws:inInterceptors>
+      -->   
+  </jaxws:endpoint>
+  
+  <!-- 使用Base64Binary传输二进制内容的endpoint定义  -->
+  <jaxws:endpoint id="smallImageServiceEP" address="/SmallImageService">
+    <jaxws:implementor ref="smallImageWebService" />
+  </jaxws:endpoint>
+
+  <!-- 使用MTOM传输二进制内容的endpoint定义  -->
+  <jaxws:endpoint id="largeimageServiceEP" address="/LargeImageService">
+    <jaxws:implementor ref="largeImageWebService" />
+    <jaxws:properties>
+      <entry key="mtom-enabled" value="true" />
+    </jaxws:properties>
+  </jaxws:endpoint>
+
+  <jaxws:endpoint id="hzServiceEP" address="/HzService">
+    <jaxws:implementor ref="hzWebService" />    
+  </jaxws:endpoint>
+  
+  <!-- UserWebService的实现Bean定义 -->
+  <bean id="userWebService" class="org.ssh.pm.common.webservice.rs.server.impl.UserWebServiceImpl" />
+
+  <!-- SmallImageWebService的实现Bean定义 -->
+  <bean id="smallImageWebService" class="org.ssh.pm.common.webservice.rs.server.impl.SmallImageWebServiceImpl" />
+
+  <!-- LargeImageWebService的实现Bean定义 -->
+  <bean id="largeImageWebService" class="org.ssh.pm.common.webservice.rs.server.impl.LargeImageWebServiceImpl" />
+
+  <bean id="hzWebService" class="org.ssh.pm.common.webservice.rs.server.impl.HzWebServiceImpl" />
+
+  <!-- dozer DTO复制工具类定义 -->
+  <bean id="dozer" class="org.dozer.DozerBeanMapper" />
+
+  <bean id="basicAuthenticationHeaderGenerator"
+    class="org.ssh.pm.common.webservice.rs.server.BasicAuthenticationHeaderGeneratorInterceptor">
+    <property name="users">
+      <map>
+        <entry key="abc" value="dev" />
+      </map>
+    </property>
+  </bean>
+  
+</beans>

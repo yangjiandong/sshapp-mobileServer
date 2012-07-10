@@ -1,0 +1,30 @@
+<html>
+<style>
+.table_border{font-size:12px;font-family:宋体;border-top:2pt solid black;border-bottom:1pt solid black;
+border-left:2pt solid black;border-right:1pt solid black;}
+.td_border{border-bottom:1pt solid black;border-right:1pt solid black;}
+
+</style>
+<body>
+<table class=table_border cellspacing=0>
+  #foreach ( $row in [$table.row0..$table.rowEnd])
+    <tr>
+    #foreach ( $col in [$table.col0..$table.colEnd])
+      #if ( $table.isVisible($row, $col) )
+        #if ( $table.isDefaultCell($row, $col) )
+          <td  class=td_border style='white-space:nowrap'> <p>&nbsp;&nbsp;&nbsp;</p> </td>
+        #else
+          #set ( $cell = $table.getCell($row, $col) )
+          <td  class=td_border style='white-space:nowrap' rowspan="$cell.rowSpan" width = 20*$cell.colSpan
+              colspan="$cell.colSpan"
+              align="center"
+              bgcolor="$cell.getProperty("backgroundColor")"> $cell.name
+          </td>
+
+        #end
+      #end
+    #end
+  #end
+</table>
+</body>
+</html>

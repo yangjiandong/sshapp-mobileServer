@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+  default-lazy-init="true">
+
+  <description>定时任务配置</description>
+
+  <!-- 根据Cron表达式执行的业务类  -->
+  <bean id="autoRunCronJob" class="org.ssh.pm.mob.job.SendExamineMessageCronJob" lazy-init="false">
+    <!-- cron表达式 每隔1分钟-->
+    <property name="cronExpression" value="0 0/1 * * * ?"/>
+    <!-- shutdown时等待任务完成, 最多等待20秒 -->
+    <property name="shutdownTimeout" value="20" />
+  </bean>
+
+  <bean id="QueryDataCronJob1" class="org.ssh.pm.mob.job.QueryDataCronJob1" lazy-init="false">
+    <!-- shutdown时等待任务完成, 最多等待20秒 -->
+    <property name="shutdownTimeout" value="20" />
+  </bean>
+  <bean id="QueryDataCronJob2" class="org.ssh.pm.mob.job.QueryDataCronJob2" lazy-init="false">
+    <!-- shutdown时等待任务完成, 最多等待20秒 -->
+    <property name="shutdownTimeout" value="20" />
+  </bean>
+  <bean id="QueryDataCronJob3" class="org.ssh.pm.mob.job.QueryDataCronJob3" lazy-init="false">
+    <!-- shutdown时等待任务完成, 最多等待20秒 -->
+    <property name="shutdownTimeout" value="20" />
+  </bean>
+  <bean id="QueryDataCronJob4" class="org.ssh.pm.mob.job.QueryDataCronJob4" lazy-init="false">
+    <!-- shutdown时等待任务完成, 最多等待20秒 -->
+    <property name="shutdownTimeout" value="20" />
+  </bean>
+  <bean id="QueryDataCronJob5" class="org.ssh.pm.mob.job.QueryDataCronJob5" lazy-init="false">
+    <!-- shutdown时等待任务完成, 最多等待20秒 -->
+    <property name="shutdownTimeout" value="20" />
+  </bean>
+
+</beans>

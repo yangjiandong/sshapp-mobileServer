@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <T_APPSETUP setupCode="user_org.code.pattern"  setupValue="1.2.3.3.3" />
+<!--<T_HZK id="1" hz="t" py="t" wb="t" />
+  <T_HZK id="2" hz="e" py="e" wb="e" />
+  <T_ACNTSUBJECT itemId = "100" ITEMCODE = "001" ITEMNAME = "TEST1" active = "Y" />
+  <T_ACNTSUBJECT itemId = "101" ITEMCODE = "002" ITEMNAME = "TEST2" active = "Y" /> -->
+</dataset>

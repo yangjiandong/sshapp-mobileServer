@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:lang="http://www.springframework.org/schema/lang"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd"
+  default-lazy-init="true">
+
+  <description>自定义脚本</description>
+
+  <!-- variables  -->
+  <!--
+    <bean
+      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <property name="systemPropertiesModeName"
+        value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+      <property name="ignoreResourceNotFound" value="true" />
+      <property name="locations">
+        <list>
+          <value>classpath*:/application.properties</value>
+        </list>
+      </property>
+    </bean>
+    -->
+
+  <!-- log script -->
+  <bean id="performanceLoggingCustomizer"
+    class="org.ssh.pm.common.utils.PerformanceLoggingCustomizer" />
+
+  <!--default refresh 20s -->
+  <lang:defaults refresh-check-delay="20000" />
+
+  <lang:groovy id="import_in_drug"
+    script-source="${groovy.script.dir}import_in_drug.groovy"
+    refresh-check-delay="1000"
+    customizer-ref="performanceLoggingCustomizer">
+  </lang:groovy>
+
+  <lang:groovy id="import_out_drug"
+    script-source="${groovy.script.dir}import_out_drug.groovy"
+    refresh-check-delay="1000"
+    customizer-ref="performanceLoggingCustomizer">
+  </lang:groovy>
+
+</beans>

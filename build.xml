@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="sshapp-mobile-server" default="copy-dev" basedir=".">
+
+  <property file="build.txt" />
+  <path id="cxf.classpath">
+    <fileset dir="${cxf.home}/lib">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+
+  <target name="copy-dev" description="拷贝开发配置文件">
+    <copy file="src/main/resources/applicationContext.dev.xml" tofile="src/main/resources/applicationContext.xml" overwrite="yes" />
+    <copy file="src/main/resources/log4j-perf4j.dev.xml" tofile="src/main/resources/log4j-perf4j.xml" overwrite="yes" />
+  </target>
+
+  <target name="copy-pro" description="拷贝生产配置文件">
+    <copy file="src/main/resources/applicationContext.pro.xml" tofile="src/main/resources/applicationContext.xml" overwrite="yes" />
+    <copy file="src/main/resources/log4j-perf4j.pro.xml" tofile="src/main/resources/log4j-perf4j.xml" overwrite="yes" />
+  </target>
+
+</project>

@@ -1,0 +1,142 @@
+开发环境说明
+============
+
+   所需软件在"ssh-开发环境".
+
+
+   1. java
+
+   jdk1.6.0_23.zip
+
+   设置环境变量
+   set JAVA_HOME=D:\java\jdk1.6.0_23
+   set path=%JAVA_HOME%\bin;
+
+   测试:
+   >java -version
+   java version "1.6.0_23"
+   Java(TM) SE Runtime Environment (build 1.6.0_23-b05)
+   Java HotSpot(TM) Client VM (build 19.0-b09, mixed mode, sharing)
+
+
+   2. maven
+
+   apache-maven-3.0.4.zip
+
+   设置环境变量
+
+   set M2_HOME=D:\jakarta\maven\apache-maven-3.0.4
+   set path=%M2_HOME%\bin;
+
+   测试:
+   >mvn -v
+   D:\HOME\sshapp>mvn -v
+   Apache Maven 3.0.4 (r1232337; 2012-01-17 16:44:56+0800)
+   ...
+
+   解压本地仓库repo.7z
+
+   设置仓库路径
+   D:\jakarta\maven\apache-maven-3.0.4\conf\settings.xml
+
+   <localRepository>D:\HOME\local\repo</localRepository>
+
+
+   3. ant
+
+   ant_home=D:\jakarta\ant\apache-ant-1.7.1
+   path=%ant_home%\bin;
+
+   4. eclipse3.6
+
+   eclipse-jee-helios-SR2-win32.7z
+   工作平台ssh-workspace.7z
+
+
+   5. 构建自己的基础框架
+
+   签出 http://svnserver/svn/sshapp/trunk/sshapp
+
+   cd sshapp
+   --运行测试用数据库
+   --可跳过
+   cd tools
+   cd h2
+   start-db.bat
+
+   --构建parent,主要是指定一些引用的第三方库
+   cd sshapp
+   cd modules
+   cd parent
+   mvn clean
+   mvn install
+
+   --构建框架 core,主要是构建基本hibernate orm dao..
+   cd sshapp
+   cd modules
+   cd core
+   mvn clean
+   mvn eclipse:eclipse
+   --在eclipse下修改程序
+   mvn install (-Dmaven.test.skip=true)
+   (开发程序需手工删除WEB-INF/lib, 重做 mvn war:inplace)
+
+   --构建框架 extension,主要是加入些扩展
+   cd sshapp
+   cd modules
+   cd extension
+   mvn clean
+   mvn install
+
+   --以上成功后,看查看相应参考目录D:\HOME\local\repo\org\springside 有了相应文件
+
+   --说明: repo.7z已含以上构建的框架
+
+
+   6. 构建项目
+
+    签出 http://svnserver/svn/sshapp/trunk/sshapp-hcost
+
+    设置eclipse m2 环境
+    mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo
+
+    构建项目
+    cd sshapp-hcost
+    mvn clean
+    mvn eclipse:eclipse
+
+    eclipse 导入项目
+
+    开发程序需手工删除WEB-INF/lib, 重做 mvn war:inplace
+
+   7. 开发调试
+
+     eclipse + tomcat
+
+     配置tomcat/conf/server.xml
+     <Context docBase="..sshap-hcost\src\main\webapp" path="/sshapp" reloadable="false"></Context>
+
+     --配置lib,  sshapp/src/main/webapp/WEB-INF下，就有lib文件了
+     mvn war:inplace
+
+     配置tomcat plugin vm
+     -Xms768m -Xmx768m -XX:PermSize=128m -XX:MaxPermSize=256m
+
+     --采用jrebel,开发时不用频繁启动
+     -Drebel.log=true -noverify -javaagent:c:\jrebel\jrebel.jar -Xmx512M -Xms512M -XX:MaxPermSize=1024m
+
+   8. jetty
+
+     run: bin/jetty.bat
+     debug: bin/jetty-debug.bat, eclipse 下运行 sshapp-jetty-debug.launch
+
+   9. 程序发布
+
+     bin/package-production.bat
+     直级发布为 jetty7 应用程序
+
+   --END
+
+
+
+

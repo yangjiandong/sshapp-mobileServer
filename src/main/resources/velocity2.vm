@@ -1,0 +1,51 @@
+<style>
+a:hover
+{background-color:#FFF6AA;}
+.table_border{font-size:12px;font-family:宋体;border-top:2px solid black;border-bottom:2px solid black;
+border-spacing:0;border-left:2px solid black;border-right:2px solid black;}
+.td_border{border-bottom:1px solid black;border-right:1px solid black}
+</style>
+#compressHtml()
+<table class=table_border cellspacing=0 width = $table.width>
+  #foreach ( $row in [$table.row0..$table.rowEnd])
+    <tr height = 20>
+    #foreach ( $col in [$table.col0..$table.colEnd])
+      #if ( $table.isVisible($row, $col) )
+        #if ( $table.isDefaultCell($row, $col) )
+          <td  width = 10> </td>
+        #else
+          #set ( $cell = $table.getCell($row, $col) )
+              #if ( $cell.colSpan == 2 )
+                  <td  class=td_border  rowspan='$cell.rowSpan' width = $cell.width
+                      colspan='$cell.colSpan'
+                      align='$cell.align'> $cell.name
+                  </td>
+              #else
+                  #if($cell.urlName)
+                  <td  class=td_border style='white-space:nowrap' rowspan='$cell.rowSpan' width = $cell.width
+                      colspan='$cell.colSpan'
+                      align='$cell.align' >
+          <a ext:params='$cell.urlName' ext:params2='$cell.urlName2' href='#' onclick='return false;'>$cell.name</a>
+                  </td>
+                  #else
+                      #if($cell.name == '0')
+                      <td  class=td_border style='white-space:nowrap' rowspan='$cell.rowSpan' width = $cell.width
+                          colspan='$cell.colSpan'
+                          align='$cell.align'> &nbsp&nbsp
+                      </td>
+                      #else
+                      <td  class=td_border style='white-space:nowrap' rowspan='$cell.rowSpan' width = $cell.width
+                          colspan='$cell.colSpan'
+                          align='$cell.align'> $cell.name
+                      </td>
+                      #end
+
+                  #end
+              #end
+        #end
+      #end
+    #end
+    </tr>
+  #end
+</table>
+  #end

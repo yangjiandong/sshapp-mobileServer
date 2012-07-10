@@ -1,0 +1,130 @@
+#jdbc settings
+#jdbc.driver=org.h2.Driver
+#jdbc.driver=com.mysql.jdbc.Driver
+#server
+#jdbc.url=jdbc:h2:tcp://localhost/~/sshappdatas
+#jdbc.url=jdbc:mysql://localhost/sshapp
+#embedded
+#jdbc.url=jdbc:h2:sshappdatas
+#jdbc.username=sa
+#jdbc.password=
+#hibernate.dialect=org.ssh.app.orm.hibernate.H2ExtDialect
+
+#jdbc.driver=oracle.jdbc.driver.OracleDriver
+#jdbc.url=jdbc:oracle:thin:@192.168.1.148:1522:orcl2
+#jdbc.username=nan2
+#jdbc.password=nan2
+#hibernate.dialect=org.hibernate.dialect.OracleDialect
+
+jdbc.driver=net.sourceforge.jtds.jdbc.Driver
+jdbc.url=jdbc:jtds:sqlserver://localhost:1433/sshapp
+jdbc.username=sa
+jdbc.password=123
+hibernate.dialect=org.hibernate.dialect.SQLServerDialect
+
+jdbc2.url=jdbc:jtds:sqlserver://192.168.1.20:1433/sshapp2
+
+sysdata.jdbc.driver=net.sourceforge.jtds.jdbc.Driver
+sysdata.jdbc.url=jdbc:jtds:sqlserver://localhost:1433/sysdata
+sysdata.jdbc.username=sa
+sysdata.jdbc.password=123
+sysdata.hibernate.dialect=org.hibernate.dialect.SQLServerDialect
+
+quartz.jdbc.driver=net.sourceforge.jtds.jdbc.Driver
+quartz.jdbc.url=jdbc:jtds:sqlserver://localhost:1433/sshapp
+quartz.jdbc.username=sa
+quartz.jdbc.password=123
+
+import.jdbc.driver=net.sourceforge.jtds.jdbc.Driver
+import.jdbc.url=jdbc:jtds:sqlserver://localhost:1433/sshapp
+import.jdbc.username=sa
+import.jdbc.password=123
+
+#hibernate settings
+#hibernate.dialect=org.hibernate.dialect.H2Dialect
+#hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+#h2
+#jdbc.driver=org.h2.Driver
+#jdbc.url=jdbc:h2:tcp://localhost/~/sshappdatas
+#embedded
+#jdbc.url=jdbc:h2:sshappdatas
+#jdbc.username=sa
+#jdbc.password=
+#hibernate.dialect=org.ssh.app.orm.hibernate.H2ExtDialect
+
+#quartz.jdbc.driver=org.h2.Driver
+#quartz.jdbc.url=jdbc:h2:tcp://localhost/~/sshappdatas
+#quartz.jdbc.username=sa
+#quartz.jdbc.password=
+
+#jdbc.driver=net.sourceforge.jtds.jdbc.Driver
+#jdbc.url=jdbc:jtds:sqlserver://localhost:1433/sshapp
+#jdbc.username=sa
+#jdbc.password=123
+#hibernate.dialect=org.hibernate.dialect.SQLServerDialect
+
+#jdbc.driver=com.mysql.jdbc.Driver
+#jdbc.url=jdbc:mysql://localhost/sshapp
+#hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+#hibernate settings
+#hibernate.dialect=org.hibernate.dialect.H2Dialect
+hibernate.show_sql=true
+hibernate.format_sql=true
+#Hibernate中缓存的统计策略,开发环境中为true
+hibernate.generate_statistics=true
+#none
+#validate:加载hibernate时，验证创建数据库表结构
+#create:每次加载hibernate，重新创建数据库表结构，这就是导致数据库表数据丢失的原因。
+#create-drop:加载hibernate时创建，退出是删除表结构
+#update:加载hibernate自动更新数据库结构
+hibernate.hbm2ddl.auto=update
+hibernate.cache_provider_class=org.hibernate.cache.EhCacheProvider
+hibernate.cache_use_query_cache=false
+hibernate.ehcache_config_file=ehcache-hibernate-config.xml
+hibernate.jdbc.batch_size=100
+
+#dbcp settings
+dbcp.initialSize=5
+dbcp.maxActive=20
+dbcp.maxIdle=10
+
+#cluster settings, maybe override in application.server.properties
+server.node_name=default
+server.addr=localhost
+
+#jmx setting
+jmx.rmi_port=18080
+
+#activemq settings
+#配置嵌入式的 activemq broker
+#persistent=true,消息的存储机制, 服务器重启也不会丢失消息
+jms.broker_url=vm://showcase?broker.persistent=false
+#localhost broker
+#jms.broker_url=tcp://localhost:61616
+#network of brokers
+#jms.broker.url=failover://(tcp://mqremote1:61616,tcp://mqremote2:61616)?randomize=true&initialReconnectDelay=100&timeout=5000
+#jms.broker_url=tcp://localhost:61616
+
+jms.clicentId=durableTopicListenerDemo
+
+#springsecurity settings
+#配合开发中设置为自动登录
+security.autologin.enabled=false
+
+# zapcat port
+zapcat.port=10052
+
+#no use ??
+jmxremote.password=${sshapp.root}/WEB-INF/jmxremote.password
+jmxjmxremote.access=${sshapp.root}/WEB-INF/jmxjmxremote.access
+
+# the ssl port the the server is listening on (GlassFish is 8181)
+ssl.port=8443
+http.port=8080
+
+memcache_server=localhost:11211
+
+groovy.script.dir=classpath:script/imports/
+#groovy.script.dir=file:/c:/

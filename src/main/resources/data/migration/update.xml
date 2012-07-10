@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE updates[
+<!ELEMENT update ( #PCDATA ) >
+<!ATTLIST update descrip CDATA #REQUIRED >
+<!ATTLIST update id NMTOKEN #REQUIRED >
+<!ATTLIST update name NMTOKEN #REQUIRED >
+<!ATTLIST update sqlType NMTOKEN #REQUIRED >
+
+<!ELEMENT updates ( update+ ) >
+   ]>
+
+<updates>
+
+  <update id="99" name="增加HA_DaysOnBed 表 "  descrip="2012.06.25," sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE HA_DaysOnBed(
+        BusDate char(10)  NOT NULL,
+        PatientNo varchar(20)  NULL,
+        PatientName varchar(20) NULL,
+        EnterDate char(10) NOT NULL,
+        NurseDeptCode varchar(20)  NOT NULL,
+        DoctorCode varchar(20)  NOT NULL,
+        MedicalTeamCode varchar(20) NULL,
+        CheckoutCode varchar(10) NULL
+    )
+  ]]>
+  </update>
+
+  <update id="98" name="修改共同成本转移表字段 "  descrip="2012.06.18," sqlType="EXEC">
+  <![CDATA[
+   alter table t_CommonCostToOrg alter column transferrate numeric(6,2)
+  ]]>
+  </update>
+
+  <update id="97" name="修改共同成本转移表字段 "  descrip="2012.06.18," sqlType="EXEC">
+  <![CDATA[
+   alter table t_CommonCostToOrg alter column transfervalue numeric(6,2)
+  ]]>
+  </update>
+
+  <update id="96" name="修改共同成本转移表字段 "  descrip="2012.06.18," sqlType="EXEC">
+  <![CDATA[
+   alter table T_CommonCosts alter column transferrate numeric(6,2)
+  ]]>
+  </update>
+
+  <update id="95" name="修改共同成本转移表字段 "  descrip="2012.06.18," sqlType="EXEC">
+  <![CDATA[
+   alter table S_CommonCost add fromDetailCode varchar(10)
+  ]]>
+  </update>
+
+  <update id="94" name="修改共同成本转移表字段 "  descrip="2012.06.18," sqlType="EXEC">
+  <![CDATA[
+   alter table T_SumupDirectCost add fromDetailCode varchar(10)
+  ]]>
+  </update>
+
+  <update id="93" name="增加TA_DiseaseRealCostDetail 表"  descrip="2012.06.18," sqlType="EXEC">
+  <![CDATA[
+    CREATE TABLE TA_DiseaseRealCostDetail(
+      DiseaseCatId int ,
+      YearMonth varchar(7),
+      TypeCode char(2) ,
+      RowName varchar(100) ,
+      ItemName varchar(100) ,
+      Value numeric(12, 2) ,
+      ItemId int
+    )
+  ]]>
+  </update>
+
+  <update id="92" name="增加TA_DrugCostAnalyse itemid字段"  descrip="2012.06.15," sqlType="EXEC">
+  <![CDATA[
+    alter table TA_RealCostAnalyseTemp add ItemId int
+  ]]>
+  </update>
+
+  <update id="92" name="增加TA_DrugCostAnalyse oneCost字段"  descrip="2012.06.15," sqlType="EXEC">
+  <![CDATA[
+    alter table TA_DrugCostAnalyse add oneCost numeric(12,2)
+  ]]>
+  </update>
+
+  <update id="91" name="增加TA_ChargeItemCostAnalyse oneCost字段"  descrip="2012.06.15," sqlType="EXEC">
+  <![CDATA[
+    alter table TA_ChargeItemCostAnalyse add oneCost numeric(12,2)
+  ]]>
+  </update>
+
+  <update id="90" name="增加TA_ItemCostAnalyse oneCost字段"  descrip="2012.06.15," sqlType="EXEC">
+  <![CDATA[
+    alter table TA_ItemCostAnalyse add oneCost numeric(12,2)
+  ]]>
+  </update>
+
+  <update id="89" name="创建临时表S_BreakEvenBase"  descrip="2012.06.07," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE S_BreakEvenBase(
+    BusDate varchar(10) NOT NULL,
+    OrgCode varchar(20) ,
+    OrgId int ,
+    Days int ,
+    PERSONTIME int NULL,
+    INPATNUMS int NULL,
+    INPATMONEY numeric(10, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="88" name="创建临时表T_MyBreakEvenBase2"  descrip="2012.06.07," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyBreakEvenBase2(
+    EXPUID int,
+    ORGCODE VARCHAR(20),
+    OrgId int,
+    DAYS int,
+    PERSONTIME int,
+    INPATNUMS int,
+    INPATMONEY DECIMAL(10,2)
+)
+  ]]>
+  </update>
+
+  <update id="87" name="创建临时表T_MyBreakEvenBase"  descrip="2012.06.07," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyBreakEvenBase(
+    EXPUID int,
+    OrgId int,
+    DAYS int,
+    PERSONTIME int,
+    INPATNUMS int,
+    INPATMONEY DECIMAL(10,2)
+)
+  ]]>
+  </update>
+
+  <update id="86" name="创建临时表T_MySumupTemp2"  descrip="2012.06.01," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MySumupTemp2(
+    expuid int ,
+    orgId int ,
+    detailCode varchar(20) ,
+    incomeCatCode varchar(20) ,
+    costCatCode varchar(20) ,
+    checkoutCode varchar(10) ,
+    money numeric(15, 2)
+)
+  ]]>
+  </update>
+
+  <update id="85" name="创建临时表t_reporttemp"  descrip="2012.06.01," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_ReportTemp(
+    reportId int NULL,
+    orgId int NULL,
+    itemCode varchar(20) NULL,
+    typeCode varchar(1) NULL,
+    money numeric(15, 2) NULL
+)
+  ]]>
+  </update>
+  <update id="84" name="创建临时表Query_DetailDataTemp"  descrip="2012.05.31," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_DetailDataTemp(
+    Expuid int NOT NULL,
+    orgId int NULL,
+    orgCode varchar(100)  NULL,
+    orgName varchar(100)  NULL,
+    value numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+  <update id="83" name="创建临时表Query_DetailData"  descrip="2012.05.31," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_DetailData(
+    Expuid int NOT NULL,
+    orgId int NULL,
+    orgCode varchar(100)  NULL,
+    orgName varchar(100)  NULL,
+    value numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="82" name="生成转移量数临时表" descrip="2012.05.25,CREATE TABLE T_MyTransferValue" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE T_MyTransferValue(
+                expuid int,
+                orgId int,
+                counts numeric(12,2))
+  ]]>
+  </update>
+  <update id="81" name="创建临时表Query_MySumupTemp"  descrip="2012.05.25," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_MySumupTemp(
+    expuid int ,
+    orgId int ,
+    busdate varchar(10),
+    detailCode varchar(20) ,
+    incomeCatCode varchar(20) ,
+    costCatCode varchar(20) ,
+    money numeric(15, 2)
+)
+  ]]>
+  </update>
+
+  <update id="80" name="创建临时表Query_CostPartDataTemp"  descrip="2012.05.25," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_CostPartDataTemp(
+    Expuid int NOT NULL,
+    CostPartCode varchar(10)   NULL,
+    CostPart varchar(100)   NULL,
+    baseMoney numeric(14, 2) NULL,
+    currentMoney numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="79" name="创建临时表Query_CostPartData"  descrip="2012.05.25," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_CostPartData(
+    Expuid int NOT NULL,
+    CostPartCode varchar(10)   NULL,
+    CostPart varchar(100)   NULL,
+    baseMoney numeric(14, 2) NULL,
+    currentMoney numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="78" name="创建临时表Query_CostDataTemp"  descrip="2012.05.25," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_CostDataTemp(
+    Expuid int NOT NULL,
+    BusDate varchar(10) NOT NULL,
+    baseMoney numeric(14, 2) NULL,
+    currentMoney numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="77" name="创建临时表Query_CostData"  descrip="2012.05.25," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_CostData(
+    Expuid int NOT NULL,
+    BusDate varchar(10) NOT NULL,
+    baseMoney numeric(14, 2) NULL,
+    currentMoney numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="76" name="创建表Query_PublishCostData"  descrip="2012.05.25," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_PublishCostData(
+    BusDate varchar(10) NOT NULL,
+    OrgId int NOT NULL,
+    CostTypeCode varchar(10)  NULL,
+    CostPartCode varchar(10)   NULL,
+    CostPart varchar(100)   NULL,
+    money numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+  <update id="75" name="创建临时表Query_IncomePartDataTemp"  descrip="2012.05.24," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_IncomePartDataTemp(
+    Expuid int NOT NULL,
+    IncomePartCode varchar(10)   NULL,
+    IncomePart varchar(100)   NULL,
+    baseMoney numeric(14, 2) NULL,
+    currentMoney numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="74" name="创建临时表Query_IncomePartData"  descrip="2012.05.24," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_IncomePartData(
+    Expuid int NOT NULL,
+    IncomePartCode varchar(10)   NULL,
+    IncomePart varchar(100)   NULL,
+    baseMoney numeric(14, 2) NULL,
+    currentMoney numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="73" name="创建临时表Query_IncomeDataTemp"  descrip="2012.05.24," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_IncomeDataTemp(
+    Expuid int NOT NULL,
+    BusDate varchar(10) NOT NULL,
+    baseMoney numeric(14, 2) NULL,
+    currentMoney numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="72" name="创建临时表Query_IncomeData"  descrip="2012.05.24," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_IncomeData(
+    Expuid int NOT NULL,
+    BusDate varchar(10) NOT NULL,
+    baseMoney numeric(14, 2) NULL,
+    currentMoney numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="71" name="创建表Query_PublishIncomeData"  descrip="2012.05.24," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_PublishIncomeData(
+    BusDate varchar(10) NOT NULL,
+    OrgId int NOT NULL,
+    IncomeTypeCode varchar(10)  NULL,
+    IncomePartCode varchar(10)   NULL,
+    IncomePart varchar(100)   NULL,
+    money numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="70" name="创建临时表Query_Data"  descrip="2012.05.24," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_Data(
+    Expuid int NOT NULL,
+    typeCode varchar(20) NOT NULL,
+    type varchar(100) NOT NULL,
+    value numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="69" name="创建临时表Query_PublishAllData"  descrip="2012.05.24," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE Query_PublishAllData(
+    BusDate varchar(10) NOT NULL,
+    OrgId int NOT NULL,
+    typeCode varchar(20) NOT NULL,
+    type varchar(100) NOT NULL,
+    value numeric(14, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="68" name="调整T_MyNoIMcomeByOrg orgCode字段"  descrip="2012.05.22," sqlType="EXEC">
+  <![CDATA[
+    alter table T_MyNoIMcomeByOrg alter column orgCode varchar(20)
+  ]]>
+  </update>
+  <update id="67" name="调整T_Sumup money字段"  descrip="2012.05.22," sqlType="EXEC">
+  <![CDATA[
+    alter table T_Sumup alter column Money numeric(19,4)
+  ]]>
+  </update>
+  <update id="66" name="调整Ta_Sumup money字段"  descrip="2012.05.22," sqlType="EXEC">
+  <![CDATA[
+    alter table Ta_Sumup alter column Money numeric(19,4)
+  ]]>
+  </update>
+
+  <update id="65" name="创建临时表T_MyOrgIncomeTemp"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyOrgIncomeTemp(
+    ExpUid int NOT NULL,
+    OrgCode varchar(20) NOT NULL,
+    IncomeTypeCode varchar(10) NOT NULL,
+    IncomeOfBase numeric(14, 2) NULL,
+    IncomeOfCurrent numeric(14, 2) NULL,
+    IncomeDif numeric(14, 2) NULL,
+    IncomeDifPercent numeric(8, 2) NULL,
+    SumIncomeOfBase numeric(14, 2) NULL,
+    SumIncomeOfCurrent numeric(14, 2) NULL,
+    SumIncomeDif numeric(14, 2) NULL,
+    SumIncomeDifPercent numeric(8, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="64" name="创建临时表T_MyOrgIncomePartTemp"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyOrgIncomePartTemp(
+    ExpUid int NOT NULL,
+    OrgCode varchar(20) NOT NULL,
+    IncomeTypeCode varchar(10)  NOT NULL,
+    IncomePartCode nvarchar(10) NOT NULL,
+    BaseMoney numeric(14, 2) NULL,
+    BaseRate numeric(8, 2) NULL,
+    CurrentMoney numeric(14, 2) NULL,
+    CurrentRate numeric(8, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="63" name="创建临时表T_MyOrgIncomePart"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyOrgIncomePart(
+    ExpUid int NOT NULL,
+    OrgCode nvarchar(20) NOT NULL,
+    IncomeTypeCode varchar(10) NOT NULL,
+    IncomePartCode varchar(10)  NOT NULL,
+    BaseMoney numeric(14, 2) NULL,
+    BaseRate numeric(8, 2) NULL,
+    CurrentMoney numeric(14, 2) NULL,
+    CurrentRate numeric(8, 2) NULL,
+    MoneyDif numeric(14, 2) NULL,
+    RateDif numeric(8, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="62" name="创建临时表T_MyOrgIncome"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyOrgIncome(
+    ExpUid int NOT NULL,
+    OrgCode varchar(20) NOT NULL,
+    IncomeTypeCode varchar(10) NOT NULL,
+    IncomeOfBase numeric(14, 2) NULL,
+    IncomeOfCurrent numeric(14, 2) NULL,
+    IncomeDif numeric(14, 2) NULL,
+    IncomeDifPercent numeric(8, 2) NULL,
+    SumIncomeOfBase numeric(14, 2) NULL,
+    SumIncomeOfCurrent numeric(14, 2) NULL,
+    SumIncomeDif numeric(14, 2) NULL,
+    SumIncomeDifPercent numeric(8, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="61" name="创建临时表T_MyOrgCostTemp"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyOrgCostTemp(
+    ExpUid int NOT NULL,
+    OrgCode varchar(20) NOT NULL,
+    CostTypeCode varchar(10) NOT NULL,
+    CostOfBase numeric(14, 2) NULL,
+    CostOfCurrent numeric(14, 2) NULL,
+    CostDif numeric(14, 2) NULL,
+    CostDifPercent numeric(8, 2) NULL,
+    SumCostOfBase numeric(14, 2) NULL,
+    SumCostOfCurrent numeric(14, 2) NULL,
+    SumCostDif numeric(14, 2) NULL,
+    SumCostDifPercent numeric(8, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="60" name="创建临时表T_MyOrgCostPartTemp"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyOrgCostPartTemp(
+    ExpUid int NOT NULL,
+    OrgCode varchar(20) NOT NULL,
+    CostTypeCode varchar(10) NOT NULL,
+    CostPartCode varchar(10)  NOT NULL,
+    BaseMoney numeric(14, 2) NULL,
+    BaseRate numeric(8, 2) NULL,
+    CurrentMoney numeric(14, 2) NULL,
+    CurrentRate numeric(8, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="59" name="创建临时表T_MyOrgCostPart"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyOrgCostPart(
+    ExpUid int NOT NULL,
+    OrgCode nvarchar(20) NOT NULL,
+    CostTypeCode varchar(10) NOT NULL,
+    CostPartCode nvarchar(10)  NOT NULL,
+    BaseMoney numeric(14, 2) NULL,
+    BaseRate numeric(8, 2) NULL,
+    CurrentMoney numeric(14, 2) NULL,
+    CurrentRate numeric(8, 2) NULL,
+    MoneyDif numeric(14, 2) NULL,
+    RateDif numeric(8, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="58" name="创建临时表T_MyOrgCost"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyOrgCost(
+    ExpUid int NOT NULL,
+    OrgCode varchar(20)  NOT NULL,
+    CostTypeCode varchar(10)  NOT NULL,
+    CostOfBase numeric(14, 2) NULL,
+    CostOfCurrent numeric(14, 2) NULL,
+    CostDif numeric(14, 2) NULL,
+    CostDifPercent numeric(8, 2) NULL,
+    SumCostOfBase numeric(14, 2) NULL,
+    SumCostOfCurrent numeric(14, 2) NULL,
+    SumCostDif numeric(14, 2) NULL,
+    SumCostDifPercent numeric(8, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="57" name="调整S_Apportion分摊量字段"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+    alter table S_Apportion alter column ApportionTotal numeric(19,2)
+  ]]>
+  </update>
+
+  <update id="56" name="调整SA_Apportion分摊量字段"  descrip="2012.05.14," sqlType="EXEC">
+  <![CDATA[
+    alter table SA_Apportion alter column ApportionTotal numeric(19,2)
+  ]]>
+  </update>
+
+  <update id="55" name="创建临时表T_MySumupTemp"  descrip="2012.05.12," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MySumupTemp(
+    expuid int ,
+    detailCode varchar(20) ,
+    incomeCatCode varchar(20) ,
+    costCatCode varchar(20) ,
+    checkoutCode varchar(10) ,
+    money numeric(15, 2)
+)
+  ]]>
+  </update>
+
+  <update id="54" name="创建临时表T_MyIncomeDetailDataTemp"  descrip="2012.05.08," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyIncomeDetailDataTemp(
+    expuid int NULL,
+    detailCode varchar(20) NULL,
+    incomeCatCode varchar(20) NULL,
+    incomeCatName varchar(50) NULL,
+    money numeric(15, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="53" name="创建临时表T_MyIncomeDataTemp"  descrip="2012.05.08," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyIncomeDataTemp(
+    expuid int NULL,
+    itemCode varchar(20)  NULL,
+    detailCode varchar(20) NULL,
+    detailName varchar(50) NULL,
+    money numeric(15, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="52" name="创建临时表T_MyPAndLIncome2Temp"  descrip="2012.05.08," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyPAndLIncome2Temp(
+    ExpUid int NOT NULL,
+    ItemCode nvarchar(50)  NULL,
+    ItemName nvarchar(50)  NULL,
+    value numeric(15, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="51" name="创建临时表T_MyIncomePartDetailDataTemp"  descrip="2012.05.08," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyIncomePartDetailDataTemp(
+    expuid int NULL,
+    partCode varchar(20) NULL,
+    incomeCatCode varchar(20) NULL,
+    incomeCatName varchar(50) NULL,
+    money numeric(15, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="50" name="创建临时表T_MyIncomePartDataTemp"  descrip="2012.05.08," sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE T_MyIncomePartDataTemp(
+    expuid int NULL,
+    itemCode varchar(20) NULL,
+    partCode varchar(20) NULL,
+    incomePart varchar(50) NULL,
+    money numeric(15, 2) NULL
+)
+  ]]>
+  </update>
+
+  <update id="49" name="创建临时表T_MyReportDataTemp"  descrip="2012.05.08," sqlType="EXEC">
+  <![CDATA[
+    CREATE TABLE T_MyReportDataTemp(
+      endDate varchar(10)  NULL,
+      expuid numeric(19, 0) NULL,
+      isLeaf varchar(1)  NULL,
+      itemCode varchar(10) NULL,
+      itemName varchar(255) NULL,
+      itemType varchar(255) NULL,
+      money numeric(19, 2) NULL,
+      orgId numeric(19, 0) NULL,
+      startDate varchar(10) NULL
+    )
+  ]]>
+  </update>
+
+  <update id="48" name="创建临时表Q_Stuff2List2"  descrip="2012.04.19," sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE Q_Stuff2List2(
+                  expuid int NOT NULL,
+                  busdate varchar(10) null,
+                  orgName varchar(100)  null,
+                  itemCode varchar(20)  null,
+                  itemName varchar(100)  null,
+                  itemSpec varchar(100)  null,
+                  amount varchar(20)  null,
+                  amountUnit varchar(20)  null,
+                  money numeric(14,4)  null
+     )
+  ]]>
+  </update>
+
+  <update id="47" name="创建临时表Q_Stuff2List1"  descrip="2012.04.19," sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE Q_Stuff2List1(
+                  expuid int NOT NULL,
+                  orgId int NULL,
+                  orgName varchar(100)  null,
+                  money numeric(14,4)  null
+     )
+  ]]>
+  </update>
+
+  <update id="46" name="临时表Q_StuffList2增加itemSpec" descrip="2012.04.19," sqlType="EXEC">
+  <![CDATA[
+     alter table Q_StuffList2 add itemSpec varchar(100)
+  ]]>
+  </update>
+
+  <update id="45" name="临时表Q_StuffList2增加itemName" descrip="2012.04.19," sqlType="EXEC">
+  <![CDATA[
+     alter table Q_StuffList2 add itemName varchar(100)
+  ]]>
+  </update>
+
+  <update id="44" name="临时表Q_StuffList2增加itemCode" descrip="2012.04.19," sqlType="EXEC">
+  <![CDATA[
+     alter table Q_StuffList2 add itemCode varchar(20)
+  ]]>
+  </update>
+
+  <update id="43" name="归集表S_TrsByIncomeOfMedicalTech的money字段精度从(14,6)改为(14,4)" descrip="2012.04.17," sqlType="EXEC">
+  <![CDATA[
+     alter table S_TrsByIncomeOfMedicalTech alter column money numeric(14,4)
+  ]]>
+  </update>
+
+  <update id="42" name="录入的摘要长度修改为100" descrip="2012.04.17," sqlType="EXEC">
+  <![CDATA[
+    alter table T_Input alter column Abstract varchar(100)
+  ]]>
+  </update>
+
+  <update id="41" name="按开单执行科室设置收入当量,门诊护理核算收入增加StarterOrgId" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_OutMedicalRIncomeOfNurse add StarterOrgId int
+  ]]>
+  </update>
+
+  <update id="40" name="按开单执行科室设置收入当量,门诊开单核算收入增加StarterOrgId" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_OutMedicalRIncomeOfStarter add StarterOrgId int
+  ]]>
+  </update>
+
+  <update id="39" name="按开单执行科室设置收入当量,门诊护理核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_OutMedicalRIncomeOfNurse add isupdated int
+  ]]>
+  </update>
+
+  <update id="38" name="按开单执行科室设置收入当量,门诊辅助核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_OutMedicalRIncomeOfHelper add isupdated int
+  ]]>
+  </update>
+
+  <update id="37" name="按开单执行科室设置收入当量,门诊执行核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_OutMedicalRIncomeOfExecutor add isupdated int
+  ]]>
+  </update>
+
+  <update id="36" name="按开单执行科室设置收入当量,门诊开单核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_OutMedicalRIncomeOfStarter add isupdated int
+  ]]>
+  </update>
+
+  <update id="35" name="按开单执行科室设置收入当量,住院手术核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_InMedicalRIncomeOfOps add isupdated int
+  ]]>
+  </update>
+
+  <update id="34" name="按开单执行科室设置收入当量,住院护理核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_InMedicalRIncomeOfNurse add isupdated int
+  ]]>
+  </update>
+
+  <update id="33" name="按开单执行科室设置收入当量,住院辅助核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_InMedicalRIncomeOfHelper add isupdated int
+  ]]>
+  </update>
+
+  <update id="32" name="按开单执行科室设置收入当量,住院执行核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_InMedicalRIncomeOfExecutor add isupdated int
+  ]]>
+  </update>
+
+  <update id="31" name="按开单执行科室设置收入当量,住院开单核算收入" descrip="2012.04.11," sqlType="EXEC">
+  <![CDATA[
+    alter table S_InMedicalRIncomeOfStarter add isupdated int
+  ]]>
+  </update>
+
+  <update id="1" name="风险基金查询临时表" descrip="2012.03.06,风险基金查询用临时表" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE Q_MedicalRiskCost(
+                  expuid int NOT NULL,
+                  orgId int NOT NULL,
+                  costCatCode varchar(20)  null,
+                  busdate varchar(20)  null,
+                  orgCode varchar(40) null,
+                  orgName varchar(40) null,
+                  yearMonth varchar(40) null,
+                  rate numeric(6, 2) NULL,
+                  incomeMoneyofin numeric(38, 4) NULL,
+                  incomeMoneyofout numeric(38, 4) NULL,
+                  incomeMoney numeric(38, 4) NULL,
+                  money numeric(38, 2) NULL
+     )
+  ]]>
+  </update>
+
+  <update id="2" name="成本构成查询临时表" descrip="2012.03.08,查询用临时表" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE [TA_MyReportData2](
+      [ExpUid] [int] NOT NULL,
+      [ItemCode] [nvarchar](50)  NULL,
+      [ItemName] [nvarchar](50)  NULL,
+      [Cost] [numeric](15, 2) NULL,
+      [ApportionCost] [numeric](15, 2) NULL,
+      [ManagementCost] [numeric](15, 2) NULL,
+      [DepreciationCost] [numeric](15, 2) NULL,
+      [DrugCost] [numeric](15, 2) NULL,
+      [MedicalCost] [numeric](15, 2) NULL,
+      [BedCost] [numeric](15, 2) NULL,
+      [AllCost] [numeric](15, 2) NULL
+    )
+  ]]>
+  </update>
+
+  <update id="3" name="成本构成查询临时表2" descrip="2012.03.08,查询用临时表" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE [TA_MyReportData2Temp](
+      [ExpUid] [int] NOT NULL,
+      [ItemCode] [nvarchar](50)  NULL,
+      [ItemName] [nvarchar](50)  NULL,
+      [Cost] [numeric](15, 2) NULL,
+      [ApportionCost] [numeric](15, 2) NULL,
+      [ManagementCost] [numeric](15, 2) NULL,
+      [DepreciationCost] [numeric](15, 2) NULL,
+      [DrugCost] [numeric](15, 2) NULL,
+      [MedicalCost] [numeric](15, 2) NULL,
+      [BedCost] [numeric](15, 2) NULL,
+      [AllCost] [numeric](15, 2) NULL
+    )
+  ]]>
+  </update>
+
+  <update id="4" name="提取风险基金临时表" descrip="2012.03.10,查询用临时表" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE T_MyMedicalRiskCostTemp(
+              expuid int NOT NULL,
+              orgCodeOfKj varchar(40) not null,
+              orgNameOfKj varchar(40) not null,
+              inDrugIncome numeric(20, 4) NULL,
+              inMedicalIncome numeric(20, 4) NULL,
+              outDrugIncome numeric(20, 4) NULL,
+              outMedicalIncome numeric(20, 4) NULL
+    )
+  ]]>
+  </update>
+
+  <update id="5" name="提取风险基金表" descrip="2012.03.10,查询用临时表" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE T_MyMedicalRiskCost(
+              expuid int NOT NULL,
+              orgCode varchar(20) NOT NULL,
+              orgName varchar(40) not null,
+              orgCodeOfKj varchar(40) not null,
+              orgNameOfKj varchar(40) not null,
+              rate numeric(6, 2) NULL,
+              incomeMoneyofin numeric(20, 4) NULL,
+              incomeMoneyofout numeric(20, 4) NULL,
+              incomeMoney numeric(20, 4) NULL,
+              money [numeric](20, 2) NULL
+    )
+  ]]>
+  </update>
+
+  <update id="6" name="删除院级核算中成本分类对应的分摊归集过程" descrip="2012.03.12,删除院级核算成本分类对应归集项中的分摊归集过程" sqlType="SQL">
+  <![CDATA[
+    delete from T_CostBySource where detailcode='A2001'
+  ]]>
+  </update>
+
+  <update id="7" name="删除科级核算中成本分类对应的分摊归集过程" descrip="2012.03.12,删除科级核算成本分类对应归集项中的分摊归集过程" sqlType="SQL">
+  <![CDATA[
+    delete from T_CostBySource where detailcode='2001'
+  ]]>
+  </update>
+
+  <update id="8" name="重建提取风险基金临时表" descrip="2012.03.20,drop T_MyMedicalRiskCostTemp" sqlType="EXEC">
+  <![CDATA[
+     drop TABLE T_MyMedicalRiskCostTemp
+  ]]>
+  </update>
+
+  <update id="9" name="重建提取风险基金临时表" descrip="2012.03.20,drop T_MyMedicalRiskCost" sqlType="EXEC">
+  <![CDATA[
+     drop TABLE T_MyMedicalRiskCost
+  ]]>
+  </update>
+
+  <update id="10" name="重建提取风险基金临时表" descrip="2012.03.20,create T_MyMedicalRiskCostTemp" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE T_MyMedicalRiskCostTemp(
+              expuid int NOT NULL,
+              hasOrgId int,
+              hasOrgName varchar(100),
+              incomeOfin numeric(14, 2) ,
+              incomeOfout numeric(14, 2),
+              incomeOf2 numeric(14, 2),
+              income numeric(14, 2)
+    )
+  ]]>
+  </update>
+
+  <update id="11" name="重建提取风险基金临时表" descrip="2012.03.20,create T_MyMedicalRiskCost" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE T_MyMedicalRiskCost(
+              expuid int NOT NULL,
+              orgCode2 varchar(20),
+              orgName2 varchar(100),
+              orgCode varchar(20),
+              orgName varchar(100),
+              hasOrgId int,
+              hasOrgName varchar(100) ,
+              incomeOfin numeric(14, 2) ,
+              incomeOfout numeric(14, 2),
+              incomeOf2 numeric(14, 2),
+              income numeric(14, 2),
+              rate numeric(6,2),
+              money numeric(14, 2)
+    )
+  ]]>
+  </update>
+
+  <update id="12" name="整理院级核算收入报表项目,增加其他收入,需重新初始化" descrip="2012.03.22,delete t_reportitem where itemcode like '501%'" sqlType="SQL">
+  <![CDATA[
+     delete T_ReportItem where itemcode like '501%'
+  ]]>
+  </update>
+
+  <update id="13" name="风险基金归集表增加其他收入字段" descrip="2012.03.22,alter table SA_MedicalRiskCostTemp add incomeMoneyOf2 numeric(14,4)" sqlType="EXEC">
+  <![CDATA[
+     alter table SA_MedicalRiskCostTemp add incomeMoneyOf2 numeric(14,4)
+  ]]>
+  </update>
+  <update id="14" name="风险基金归集表增加其他收入字段" descrip="2012.03.22,alter table SA_MedicalRiskCost add incomeMoneyOf2 numeric(14,4)" sqlType="EXEC">
+  <![CDATA[
+     alter table SA_MedicalRiskCost add incomeMoneyOf2 numeric(14,4)
+  ]]>
+  </update>
+  <update id="15" name="按医生挂号导入接口增加门诊科室,方便院级核算统计" descrip="2012.03.22,alter table H_RegisterIncomeByDoctor add deptCode varchar(20)" sqlType="EXEC">
+  <![CDATA[
+     alter table H_RegisterIncomeByDoctor add deptCode varchar(20)
+  ]]>
+  </update>
+  <update id="16" name="院内服务项目接口增加单次服务费字段maintMoney" descrip="2012.03.23,alter table H_IntService add maintMoney numeric(12,2)" sqlType="EXEC">
+  <![CDATA[
+     alter table H_IntService add maintMoney numeric(12,2)
+  ]]>
+  </update>
+
+  <update id="17" name="科级核算分摊归集表增加年份字段" descrip="2012.03.24,alter table S_Apportion add year char(4)" sqlType="EXEC">
+  <![CDATA[
+     alter table S_Apportion add year char(4)
+  ]]>
+  </update>
+  <update id="18" name="科级核算分摊归集表增加月份字段" descrip="2012.03.24,alter table S_Apportion add month char(2)" sqlType="EXEC">
+  <![CDATA[
+     alter table S_Apportion add month char(2)
+  ]]>
+  </update>
+  <update id="20" name="科级核算增加统计核算单元人数临时表" descrip="2012.03.26,CREATE TABLE T_MyEmployeeOrgCounts" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE T_MyEmployeeOrgCounts(
+                expuid int,
+                orgId int,
+                counts int)
+  ]]>
+  </update>
+  <update id="21" name="药剂领用接口增加发放库房代码" descrip="2012.03.29,alter table h_drugcost add FromDeptCode varchar(20)" sqlType="EXEC">
+  <![CDATA[
+     alter table H_Drugcost add FromDeptCode varchar(20)
+  ]]>
+  </update>
+  <update id="22" name="科级核算药剂领用采集表增加发放库房代码" descrip="2012.03.29,alter table g_drugcost add FromDeptCode varchar(20)" sqlType="EXEC">
+  <![CDATA[
+     alter table G_Drugcost add FromDeptCode varchar(20)
+  ]]>
+  </update>
+  <update id="23" name="科级核算药剂领用归集表增加发放库房代码" descrip="2012.03.29,alter table s_drugcost add FromDeptCode varchar(20)" sqlType="EXEC">
+  <![CDATA[
+     alter table S_Drugcost add FromDeptCode varchar(20)
+  ]]>
+  </update>
+  <update id="24" name="院级核算药剂领用采集表增加发放库房代码" descrip="2012.03.29,alter table ga_drugcost add FromDeptCode varchar(20)" sqlType="EXEC">
+  <![CDATA[
+     alter table Ga_Drugcost add FromDeptCode varchar(20)
+  ]]>
+  </update>
+  <update id="25" name="院级核算药剂领用归集表增加发放库房代码" descrip="2012.03.29,alter table sa_drugcost add FromDeptCode varchar(20)" sqlType="EXEC">
+  <![CDATA[
+     alter table Sa_Drugcost add FromDeptCode varchar(20)
+  ]]>
+  </update>
+  <update id="26" name="院级核算药品成本采集表增加发放库房代码" descrip="2012.03.29,alter table ga_drugnewcost add FromDeptCode varchar(20)" sqlType="EXEC">
+  <![CDATA[
+     alter table Ga_Drugnewcost add FromDeptCode varchar(20)
+  ]]>
+  </update>
+  <update id="27" name="院级核算药品成本归集表增加发放库房代码" descrip="2012.03.29,alter table sa_drugnewcost add FromDeptCode varchar(20)" sqlType="EXEC">
+  <![CDATA[
+     alter table Sa_Drugnewcost add FromDeptCode varchar(20)
+  ]]>
+  </update>
+  <update id="28" name="增加药剂领用按发放库房汇总临时表" descrip="2012.03.29,CREATE TABLE Q_DrugCostFromDept" sqlType="EXEC">
+  <![CDATA[
+     CREATE TABLE Q_DrugCostFromDept(
+                expuid int,
+                deptCode varchar(20),
+                deptName varchar(20),
+                money numeric(18, 2))
+  ]]>
+  </update>
+  <update id="29" name="增加病人领用药品成本采集表" descrip="2012.04.05,CREATE TABLE G_DrugNewCost" sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE G_DrugNewCost(
+    BusDate char(10) NOT NULL,
+    DeptCode varchar(20) NOT NULL,
+    OrgCode varchar(20) NOT NULL,
+    OrgCode1 varchar(20) NOT NULL,
+    OrgCode2 varchar(20) ,
+    OrgCode3 varchar(20) ,
+    OrgCode4 varchar(20) ,
+    ItemCode varchar(20) NOT NULL,
+    ItemId int NOT NULL,
+    Money numeric(12, 4) NOT NULL,
+    OrgId int NULL,
+    OrgCode5 varchar(20) ,
+    OrgCode6 varchar(20) ,
+    OrgCode7 varchar(20) ,
+    FromDeptCode varchar(20)
+)
+  ]]>
+  </update>
+  <update id="30" name="增加病人领用药品成本归集表" descrip="2012.04.05,CREATE TABLE S_DrugNewCost" sqlType="EXEC">
+  <![CDATA[
+CREATE TABLE S_DrugNewCost(
+    BusDate char(10) NOT NULL,
+    OrgCode varchar(20) NOT NULL,
+    ItemId int NOT NULL,
+    CostCatCode varchar(10),
+    Money numeric(10, 2) NOT NULL,
+    OrgId int NULL,
+    FromDeptCode varchar(20)
+)
+  ]]>
+  </update>
+</updates>

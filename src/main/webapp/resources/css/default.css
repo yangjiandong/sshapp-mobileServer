@@ -1,0 +1,572 @@
+
+.x-form-text,textarea.x-form-field {
+  background: #fff;
+  border-color: #B5B8C8;
+}
+
+.x-form-focus,textarea.x-form-focus {
+  background: #FFF6AA;
+  background-color: #FFF6AA;
+  border-color: #7eadd9;
+}
+
+.gui_title {
+  background-color: #dfe8f6;
+  font-family: arial, sans-serif, tahoma, verdana, arial;
+  font-size: 16px;
+  height: 22px;
+  padding-top: 4px;
+  font-weight: bold;
+  border-bottom: 1px solid #99bbe8;
+  /*
+  margin-bottom:2px;*/
+}
+
+.cellClsAlignTop {
+  vertical-align: top;
+  padding-right: 10px;
+}
+
+.field_important_1 {
+  background-color: #CFF6BA !important;
+  background: #CFF6BA !important;
+  font-weight: bold;
+}
+
+/*********************   UX Controls  ************************
+
+/* [OPTIONAL] -- may be used for either Ext.grid.GroupSummary / Ext.ux.grid.GridSummary plugins */
+.x-grid3-summary-row {
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  color: #333;
+  background: #f1f2f4;
+}
+
+.x-grid3-summary-row .x-grid3-cell-inner {
+  font-weight: bold;
+  padding-bottom: 4px;
+}
+
+.x-grid3-cell-first .x-grid3-cell-inner {
+  padding-left: 16px;
+}
+
+.x-grid-hide-summary .x-grid3-summary-row {
+  display: none;
+}
+
+.x-grid3-summary-msg {
+  padding: 4px 16px;
+  font-weight: bold;
+}
+
+/* [REQUIRED] (by Ext.ux.grid.GridSummary plugin) */
+.x-grid3-gridsummary-row-inner {
+  overflow: hidden;
+  width: 100%;
+} /* IE6 requires width:100% for hori. scroll to work */
+.x-grid3-gridsummary-row-offset {
+  width: 10000px;
+}
+
+.x-grid-hide-gridsummary .x-grid3-gridsummary-row-inner {
+  display: none;
+}
+
+/**
+* thanks to:
+* http://www.extjs.com/forum/showthread.php?20802-Grid-Summary-Plugin&highlight=gridsummary
+*/
+.x-grid3-summary-row {
+  background: #F1F2F4 none repeat scroll 0%;
+  color: #333333;
+  border: 1px solid #ededed;
+  border-top-color: #fff;
+}
+
+.x-grid3-summary-row .x-grid3-cell-inner {
+  font-weight: bold;
+  padding-bottom: 4px;
+}
+
+.x-grid3-summary-row .x-grid3-cell-first .x-grid3-cell-inner {
+  padding-left: 16px;
+}
+
+.x-grid-hide-summary .x-grid3-summary-row {
+  display: none;
+}
+
+.x-grid3-summary-msg {
+  font-weight: bold;
+  padding: 4px 16px;
+}
+
+/* Override standard grid styles (add colour to vertical grid lines) */
+/* 显示表格横竖线 */
+.x-grid3-col {
+  border-left: 1px solid #EEEEEE;
+  border-right: 0px solid #D2D2D2;
+}
+
+/* Also remove padding from table data (to compensate for added grid lines) */
+.x-grid3-row td,.x-grid3-summary-row td {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+/* end */
+#titlebar {
+  background: #7F99BE url(../img/layout-browser-hd-bg.gif) repeat-x center;
+}
+
+#titlebar h1 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  font-weight: normal;
+  padding: 5px 10px;
+  /* text-shadow: 0 1px 0 #fff; */
+}
+
+#start-div h2 {
+  font-size: 12px;
+  color: #555;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #C3D0DF;
+}
+
+#start-div p {
+  margin: 10px 0;
+}
+
+#welcome-div h2 {
+  font-size: 12px;
+  color: #555;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #C3D0DF;
+}
+
+#welcome-div p {
+  margin: 10px 0;
+}
+
+#login-logo {
+  background: url(../images/logo.jpg) no-repeat center center;
+}
+
+/* 窗口图标 */
+.icon-win {
+  background-image: url( ../img/win.gif ) !important;
+}
+
+.calendar .x-menu-item-icon {
+  background-image:
+    url(../extjs/resources/images/default/shared/calendar.gif);
+}
+
+.search-item {
+  font: normal 11px tahoma, arial, helvetica, sans-serif;
+  padding: 3px 10px 3px 10px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.search-item h3 {
+  display: block;
+  font: inherit;
+  font-weight: bold;
+}
+
+.search-item h3 span {
+  float: right;
+  font-weight: normal;
+  margin: 0 0 5px 5px;
+  width: 100px;
+  display: block;
+  clear: none;
+}
+
+body {
+  font-family: helvetica, tahoma, verdana, sans-serif;
+  padding: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  font-size: 13px;
+  background-color: #DFE8F6 !important;
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+h1 {
+  font-size: large;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.example-info {
+  width: 150px;
+  border: 1px solid #c3daf9;
+  border-top: 1px solid #DCEAFB;
+  border-left: 1px solid #DCEAFB;
+  background: #ecf5fe url( ../images/info-bg.gif ) repeat-x;
+  font-size: 10px;
+  padding: 8px;
+}
+
+pre.code {
+  background: #F8F8F8;
+  border: 1px solid #e8e8e8;
+  padding: 10px;
+  margin: 10px;
+  margin-left: 0px;
+  border-left: 5px solid #e8e8e8;
+  font-size: 12px !important;
+  line-height: 14px !important;
+}
+
+.msg .x-box-mc {
+  font-size: 14px;
+}
+
+#msg-div {
+  position: absolute;
+  left: 35%;
+  top: 10px;
+  width: 250px;
+  z-index: 20000;
+}
+
+.x-grid3-row-body p {
+  margin: 5px 5px 10px 5px !important;
+}
+
+/*!
+ * Ext JS Library 3.0.0
+ * Copyright(c) 2006-2009 Ext JS, LLC
+ * licensing@extjs.com
+ * http://www.extjs.com/license
+ */
+.x-column-tree .x-panel-header {
+  padding: 3px 0px 0px 0px;
+  border-bottom-width: 0px;
+}
+
+.x-column-tree .x-panel-header .x-panel-header-text {
+  margin-left: 3px
+}
+
+.x-column-tree .x-tree-node {
+  zoom: 1;
+}
+
+.x-column-tree .x-tree-node-el {
+  /*border-bottom:1px solid #eee; borders? */
+  zoom: 1;
+}
+
+.x-column-tree .x-tree-selected {
+  background: #d9e8fb;
+}
+
+.x-column-tree  .x-tree-node a {
+  line-height: 18px;
+  vertical-align: middle;
+}
+
+.x-column-tree  .x-tree-node a span {
+
+}
+
+.x-column-tree  .x-tree-node .x-tree-selected a span {
+  background: transparent;
+  color: #000;
+}
+
+.x-tree-col {
+  float: left;
+  overflow: hidden;
+  padding: 0 1px;
+  zoom: 1;
+}
+
+.x-tree-col-text,.x-tree-hd-text {
+  color: #000;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  padding: 3px 3px 3px 5px;
+  white-space: nowrap;
+  font: normal 11px arial, tahoma, helvetica, sans-serif;
+}
+
+.x-tree-headers {
+  margin-top: 3px;
+  background: #f9f9f9
+    url(../extjs/resources/images/default/grid/grid3-hrow.gif) repeat-x
+    0 bottom;
+  cursor: default;
+  zoom: 1;
+}
+
+.x-tree-hd {
+  float: left;
+  overflow: hidden;
+  border-left: 1px solid #eee;
+  border-right: 1px solid #d0d0d0;
+}
+
+.x-grid-font-red {
+  background: #FF0000;
+}
+
+.x-grid-font-green {
+  background: #00FF00;
+}
+
+.img-chooser-view {
+  background: white;
+  font: 11px Arial, Helvetica, sans-serif;
+}
+
+.img-chooser-view .thumb {
+  background: #FFFFFF;
+  padding: 5px;
+}
+
+.img-chooser-view .thumb img {
+  height: 80px;
+  width: 90px;
+}
+
+.img-chooser-view .thumb-wrap {
+  float: left;
+  margin: 4px;
+  margin-left: 10px;
+  padding: 5px;
+  text-align: center;
+}
+
+.img-chooser-view .thumb-wrap span {
+  display: block;
+  overflow: hidden;
+  text-align: center;
+  font-size: 12px;
+}
+
+.img-chooser-view .x-view-over {
+  border: 1px solid #dddddd;
+  background: #efefef
+    url(../extjs/resources/images/default/grid/row-over.gif) repeat-x
+    left top;
+  padding: 4px;
+}
+
+.img-chooser-view .x-view-selected {
+  background: #DFEDFF;
+  border: 1px solid #6593cf;
+  padding: 4px;
+}
+
+.img-chooser-view .x-view-selected .thumb {
+  background: transparent;
+}
+
+.img-chooser-view .x-view-selected span {
+  color: #1A4D8F;
+}
+
+.img-chooser-view .loading-indicator {
+  font-size: 11px;
+  background-image:
+    url('../extjs/resources/images/default/grid/loading.gif');
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 20px;
+  margin: 10px;
+}
+
+.component {
+  -moz-border-radius: 3px;
+  height: 27px;
+  width: 27px;
+  border: solid black 2px;
+  text-align: center;
+  color: black;
+  font: normal 12px arial;
+  overflow: hidden;
+  display: block;
+  cursor: pointer;
+}
+
+#WorkflowComponentSelector .component {
+  margin: 5px;
+  float: left;
+}
+
+#WorkflowComponentSelector .component.over {
+  border-color: navy;
+}
+
+#WorkflowComponentSelector .component.selected {
+  border-color: blue;
+}
+
+.moduleTitle {
+  COLOR: #000000;
+  FONT-FAMILY: '黑体';
+  FONT-SIZE: 16px;
+  FONT-WEIGHT: norml;
+  TEXT-DECORATION: none
+}
+
+/*
+ * FileUploadField component styles
+ */
+.x-form-file-wrap {
+  position: relative;
+  height: 22px;
+}
+
+.x-form-file-wrap .x-form-file {
+  position: absolute;
+  right: 0;
+  -moz-opacity: 0;
+  filter: alpha(opacity :             0);
+  opacity: 0;
+  z-index: 2;
+  height: 22px;
+}
+
+.x-form-file-wrap .x-form-file-btn {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+}
+
+.x-form-file-wrap .x-form-file-text {
+  position: absolute;
+  left: 0;
+  z-index: 3;
+  color: #777;
+}
+
+/**
+only use in firefox
+
+.x-item-disabled {
+  color: #000000;
+  -moz-opacity: 100;
+  opacity: 100;
+  filter:alpha(opacity=10)
+}
+*/
+
+/*
+ * otherpayment
+ */
+.otherpayment-form-disabled-text-font-color {
+  color: black;
+}
+
+.otherpayment-form-disabled-text-font-color-2 {
+  color: black !important;
+}
+
+/** 参考example/feed-view/feed-viewer.css **/
+.x-combo-list-item {
+  zoom: 1;
+}
+
+.x-combo-list-item strong {
+  color: #777;
+  font-size: 11px;
+  font-style: normal;
+  /* float:left; */
+  float: right;
+}
+
+.x-combo-list-item em {
+  color: #222;
+  font-size: 12px;
+  font-style: normal;
+  float: left;
+  /** width:250px; **/
+}
+
+/** xcheckbox **/
+
+.xcheckbox-wrap {
+  line-height: 18px;
+  padding-top: 2px;
+}
+
+.xcheckbox-wrap a {
+  display: block;
+  width: 16px;
+  height: 16px;
+  float: left;
+}
+
+.x-toolbar .xcheckbox-wrap {
+  padding: 0 0 2px 0;
+}
+
+.xcheckbox-on {
+  background: transparent
+    url(../img/checked.gif) no-repeat 0 0;
+}
+
+.xcheckbox-off {
+  background: transparent
+    url(../img/unchecked.gif) no-repeat 0 0;
+}
+
+.xcheckbox-disabled {
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  filter: alpha(opacity = 50);
+  cursor: default;
+}
+
+/**
+ *
+ * Ext.ux.form.LovCombo CSS File
+ *
+ * @author    Ing.Jozef
+ * @copyright (c) 2008.
+ * @date      5. April 2008
+ * @version   $Id: lovCombo.css,v 1.1.2.1 2009/11/30 02:12:32 xiaozhangqi Exp $
+ *
+ * @license Ext.ux.form.LovCombo.css is licensed under the terms of the Open Source
+ * LGPL 3.0 license. Commercial use is permitted to the extent that the
+ * code/component(s) do NOT become part of another Open Source or Commercially
+ * licensed development library or toolkit without explicit permission.
+ *
+ * License details: http://www.gnu.org/licenses/lgpl.html
+ */
+
+.ux-lovcombo-icon {
+    width:16px;
+    height:16px;
+    float:left;
+    background-position: -1px -1px ! important;
+    background-repeat:no-repeat ! important;
+}
+.ux-lovcombo-icon-checked {
+    background: transparent url(../ext/resources/images/default/menu/checked.gif);
+}
+.ux-lovcombo-icon-unchecked {
+    background: transparent url(../ext/resources/images/default/menu/unchecked.gif);
+}
+
+/* eof */

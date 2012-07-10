@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+  default-lazy-init="true">
+
+  <description>Spring测试环境配置文件</description>
+
+  <!-- 定义受环境影响易变的变量 -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="locations">
+      <list>
+        <value>classpath*:/version.properties</value>
+        <!-- 本地开发环境配置 -->
+        <value>classpath*:/application.test.properties</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- sys config info -->
+  <bean id="sysConfigData" class="org.ssh.pm.SysConfigData">
+    <property name="productName" value="${sysconfig.productName}"/>
+    <property name="version" value="${sysconfig.version}"/>
+    <property name="buildId" value="${sysconfig.buildId}"/>
+    <property name="copyright" value="${sysconfig.copyright}"/>
+    <property name="vendor" value="${sysconfig.vendor}"/>
+    <property name="year" value="${sysconfig.year}"/>
+    <property name="website" value="${sysconfig.website}"/>
+    <property name="runMode" value="DEV"/>
+  </bean>
+
+  <context:annotation-config />
+
+  <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
+  <context:component-scan base-package="org.ssh.pm, org.ssh.sys" />
+
+  <!-- 以静态变量保存ApplicationContext -->
+  <bean class="org.springside.modules.utils.spring.SpringContextHolder" lazy-init="false" />
+
+  <!-- 数据源配置,在测试环境使用JDBC直接连接 -->
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <!-- Connection Info -->
+    <property name="driverClassName" value="${jdbc.driver}" />
+    <property name="url" value="${jdbc.url}" />
+    <property name="username" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+  </bean>
+
+  <bean id="sysDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <!-- Connection Info -->
+    <property name="driverClassName" value="${sysdata.jdbc.driver}" />
+    <property name="url" value="${sysdata.jdbc.url}" />
+    <property name="username" value="${sysdata.jdbc.username}" />
+    <property name="password" value="${sysdata.jdbc.password}" />
+  </bean>
+
+  <!-- quartz使用的数据源配置 -->
+  <bean id="quartzDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${quartz.jdbc.driver}" />
+    <property name="url" value="${quartz.jdbc.url}" />
+    <property name="username" value="${quartz.jdbc.username}" />
+    <property name="password" value="${quartz.jdbc.password}" />
+  </bean>
+
+  <!-- 运行脚本初始化内存数据库 -->
+  <!--
+  <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+    <jdbc:script location="classpath:sql/h2/schema.sql" />
+  </jdbc:initialize-database>
+
+  <jdbc:initialize-database data-source="quartzDataSource" ignore-failures="ALL">
+    <jdbc:script location="classpath:sql/h2/quartz.sql" />
+  </jdbc:initialize-database>
+  -->
+
+  <!-- 复制hibernate默认策略,暂时不用 -->
+  <bean id="namingStrategy" class="org.ssh.pm.orm.hibernate.AppNamingStrategy"/>
+
+  <!-- Hibernate配置 -->
+  <bean id="sessionFactory" class="org.ssh.pm.orm.hibernate.customId.CustomSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+
+    <!--
+        <property name="namingStrategy" ref="namingStrategy" />
+        <bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+      </property>
+      -->
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+        <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+        <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+        <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+      </props>
+    </property>
+    <!-- 放宽包名,只要是entity -->
+    <property name="packagesToScan" value="org.ssh.pm.**.entity" />
+    <property name="eventListeners">
+      <map>
+        <entry key="save-update">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.AuditListener" />
+            <bean class="org.hibernate.event.def.DefaultSaveOrUpdateEventListener" />
+          </list>
+        </entry>
+        <entry key="post-insert">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-update">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-delete">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+
+      </map>
+    </property>
+  </bean>
+
+  <bean id="sysdataSessionFactory" class="org.ssh.pm.orm.hibernate.customId.CustomSessionFactoryBean">
+    <property name="dataSource" ref="sysDataSource" />
+    <!--
+      <property name="namingStrategy" ref="namingStrategy" />
+      -->
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${sysdata.hibernate.dialect}</prop>
+        <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+        <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+        <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+      </props>
+    </property>
+    <!-- 放宽包名,只要是entity -->
+    <property name="packagesToScan" value="org.ssh.sys.**.entity" />
+    <property name="eventListeners">
+      <map>
+        <entry key="save-update">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.AuditListener" />
+            <bean class="org.hibernate.event.def.DefaultSaveOrUpdateEventListener" />
+          </list>
+        </entry>
+        <entry key="post-insert">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-update">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-delete">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+
+      </map>
+    </property>
+  </bean>
+
+  <!-- 事务管理器配置, Hibernate单数据源事务 -->
+  <bean id="defaultTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
+
+  <!-- 事务管理器配置, Hibernate单数据源事务 -->
+  <bean id="sysdataTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sysdataSessionFactory" />
+  </bean>
+
+  <!-- 另一个事务管理器, Jdbc单数据源事务 -->
+  <bean id="quartzTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="quartzDataSource" />
+  </bean>
+
+  <!-- 另一个事务管理器, Jdbc单数据源事务 -->
+  <bean id="jobTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+
+  <!-- 使用annotation定义事务 -->
+  <tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
+</beans>

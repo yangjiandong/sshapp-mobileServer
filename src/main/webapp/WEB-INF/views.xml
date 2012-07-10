@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/util
+  http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+  <bean name="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
+
+  <bean name="xmlView" class="org.springframework.web.servlet.view.xml.MarshallingView">
+    <property name="marshaller">
+      <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="classesToBeBound">
+          <list>
+            <value>org.ssh.pm.common.mapping.other.ListBean</value>
+            <value>org.ssh.pm.common.mapping.other.MapBean</value>
+            <value>org.ssh.pm.common.mapping.other.AccountBean</value>
+            <value>org.ssh.pm.common.mapping.other.Fruit</value>
+            <value>org.ssh.pm.common.mapping.xml.User</value>
+            <value>org.ssh.pm.common.mapping.xml.Role</value>
+          </list>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <bean name="excel" class="org.ssh.pm.common.utils.view.ExcelView" />
+  <bean name="pdf" class="org.ssh.pm.common.utils.view.Pdfview" />
+  <bean name="rss" class="org.ssh.pm.common.utils.view.RssFeedView" />
+</beans>

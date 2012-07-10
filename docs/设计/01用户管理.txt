@@ -1,0 +1,55 @@
+用户管理
+========
+
+设计
+----
+
+   1. 登录
+
+   服务端
+   url: common/logon
+   controller: Common2Controller/logon
+   server: AccountManager.userLogin
+
+   如果手机登录（type=mobile）,记录用户操作来源,同时将UserDTO返回给客户端
+
+   客户端
+   LogonAction
+   LogonActivity
+
+   2. 同步his用户
+
+   url: sys/import_his_user
+   controller: systemController.importHisUser
+   server: userService.importHisUser
+   entity: HisUser
+
+   --不需要手工建立
+   create h_HisUser(
+   code varchar(20),
+   name varchar(20),
+   loginName varchar(20),
+   departNo varchar(20),
+   departName varchar(20),
+   title varchar(100),
+   job varchar(100),
+   mobileNo varchar(50),
+   note varchar(100)
+   )
+
+   create PROCEDURE sp_import_his_user
+---------------------------------------------------------
+--     功能：从 HIS 取得人员字典信息，存入接口表
+--
+---------------------------------------------------------
+AS
+
+delete from h_HisUser;
+
+
+-- 取数
+--INSERT INTO h_HisUser
+--  (code,name,loginName,departNo,departName,title,job,mobileNo,note)
+--SELECT
+
+   --END

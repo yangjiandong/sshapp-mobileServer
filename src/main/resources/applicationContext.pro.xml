@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+  xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+  default-lazy-init="true">
+
+  <description>Spring - 生产环境公共配置</description>
+
+  <!-- 定义受环境影响易变的变量 -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="locations">
+      <list>
+        <value>classpath*:/version.properties</value>
+        <!-- 标准配置 -->
+        <value>classpath*:/application.properties</value>
+        <!-- 本地开发环境配置 -->
+        <value>classpath*:/application.local.properties</value>
+        <!-- 服务器生产环境配置 CONFIG_DIR 为环境变量-->
+        <value>file:///${SSH_CONFIG_DIR}/config/mobile.application.server.properties</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- sys config info -->
+  <bean id="sysConfigData" class="org.ssh.pm.SysConfigData">
+    <property name="productName" value="${sysconfig.productName}"/>
+    <property name="version" value="${sysconfig.version}"/>
+    <property name="buildId" value="${sysconfig.buildId}"/>
+    <property name="copyright" value="${sysconfig.copyright}"/>
+    <property name="vendor" value="${sysconfig.vendor}"/>
+    <property name="year" value="${sysconfig.year}"/>
+    <property name="website" value="${sysconfig.website}"/>
+    <property name="sshConfigDir" value="${SSH_CONFIG_DIR}"/>
+    <property name="runMode" value="PROC"/>
+  </bean>
+
+  <context:annotation-config />
+
+  <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
+  <context:component-scan base-package="org.ssh.pm, org.ssh.sys" />
+
+  <!-- 以静态变量保存ApplicationContext -->
+  <bean class="org.springside.modules.utils.spring.SpringContextHolder" lazy-init="false" />
+
+  <aop:aspectj-autoproxy />
+  <!-- perf4j -->
+  <bean id="timingAspect" class="org.perf4j.slf4j.aop.TimingAspect"/>
+
+  <!--
+      数据源配置,使用应用内的DBCP数据库连接池 <bean id="dataSource"
+      class="org.apache.commons.dbcp.BasicDataSource"
+      destroy-method="close"> <property name="driverClassName"
+      value="${jdbc.driver}" /> <property name="url" value="${jdbc.url}" />
+      <property name="username" value="${jdbc.username}" /> <property
+      name="password" value="${jdbc.password}" />
+    -->
+  <!-- 多数据源 -->
+  <bean id="parentDataSource"
+    class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+    <property name="driverClass" value="${jdbc.driver}" />
+    <!--
+    <property name="checkoutTimeout" value="30000" />
+    -->
+    <!--JDBC的标准参数，用以控制数据源内加载的PreparedStatements数量。但由于预缓存的statements属于单个connection而不是整个连接池。所以设置这个参数需要考虑到多方面的因素。如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 0-->
+    <property name="maxStatements" value="100" />
+    <!--maxStatementsPerConnection定义了连接池内单个连接所拥有的最大缓存statements数。Default: 0 -->
+    <property name="maxStatementsPerConnection" value="100" />
+    <!--初始化时获取连接，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+    <property name="initialPoolSize" value="10" />
+    <property name="minPoolSize" value="10" />
+    <property name="maxPoolSize" value="50" />
+    <!--最大空闲时间,1800秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+    <property name="maxIdleTime" value="1800" />
+    <!--debug 90-60 or 36000 秒后，kill未返回连接-->
+    <property name="unreturnedConnectionTimeout" value="36000"/>
+    <!--
+    <property name="debugUnreturnedConnectionStackTraces" value="true" />
+    -->
+    <!--每1800秒检查所有连接池中的空闲连接。Default: 0 -->
+    <property name="idleConnectionTestPeriod" value="1800" />
+    <property name="acquireIncrement" value="5" />
+    <property name="acquireRetryAttempts" value="30" />
+    <property name="breakAfterAcquireFailure" value="true" />
+    <property name="testConnectionOnCheckout" value="false" />
+    <!--c3p0是异步操作的，缓慢的JDBC操作通过帮助进程完成。扩展这些操作可以有效的提升性能通过多线程实现多个操作同时被执行。Default: 3-->
+    <property name="numHelperThreads" value="3" />
+  </bean>
+
+  <!-- 数据源配置,使用应用内的c3p0数据库连接池 -->
+  <bean id="defaultDataSource" parent="parentDataSource">
+    <!-- Connection Info -->
+    <property name="jdbcUrl" value="${jdbc.url}" />
+    <property name="user" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+  </bean>
+
+  <bean id="oneDataSource" parent="parentDataSource">
+    <!-- Connection Info -->
+    <property name="jdbcUrl" value="${jdbc2.url}" />
+    <property name="user" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+  </bean>
+
+  <bean id="dataSource" class="org.ssh.pm.orm.hibernate.DynamicDataSource">
+    <property name="targetDataSources">
+      <map key-type="java.lang.String">
+        <entry key="default" value-ref="defaultDataSource"/>
+      </map>
+    </property>
+    <property name="defaultTargetDataSource" ref="defaultDataSource"/>
+  </bean>
+  <!-- 多数据源 -->
+
+  <bean id="sysDataSource" parent="parentDataSource">
+    <!-- Connection Info -->
+    <property name="driverClass" value="${sysdata.jdbc.driver}" />
+    <property name="jdbcUrl" value="${sysdata.jdbc.url}" />
+    <property name="user" value="${sysdata.jdbc.username}" />
+    <property name="password" value="${sysdata.jdbc.password}" />
+    <!--初始化时获取连接，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+      <property name="initialPoolSize" value="10" />
+      <property name="minPoolSize" value="10" />
+      <property name="maxPoolSize" value="20" />
+  </bean>
+
+  <bean id="quartzDataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driver}" />
+    <property name="url" value="${jdbc.url}" />
+    <property name="username" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+  </bean>
+
+  <!-- Hibernate配置 -->
+  <bean id="sessionFactory"
+    class="org.ssh.pm.orm.hibernate.customId.CustomSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">false</prop>
+        <prop key="hibernate.generate_statistics">false</prop>
+        <prop key="hibernate.connection.release_mode">auto</prop>
+        <prop key="hibernate.autoReconnect">true</prop>
+        <prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
+        <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+        <prop key="hibernate.cache.use_query_cache">false</prop>
+        <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+      </props>
+    </property>
+    <!-- 放宽包名,只要是entity -->
+    <property name="packagesToScan" value="org.ssh.pm.**.entity" />
+    <property name="eventListeners">
+      <map>
+        <entry key="save-update">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.AuditListener" />
+            <bean class="org.hibernate.event.def.DefaultSaveOrUpdateEventListener" />
+          </list>
+        </entry>
+        <entry key="post-insert">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-update">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-delete">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+
+      </map>
+    </property>
+  </bean>
+
+  <bean id="sysdataSessionFactory" class="org.ssh.pm.orm.hibernate.customId.CustomSessionFactoryBean">
+    <property name="dataSource" ref="sysDataSource" />
+    <!--
+      <property name="namingStrategy" ref="namingStrategy" />
+      -->
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${sysdata.hibernate.dialect}</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">false</prop>
+        <prop key="hibernate.generate_statistics">false</prop>
+        <prop key="hibernate.connection.release_mode">auto</prop>
+        <prop key="hibernate.autoReconnect">true</prop>
+        <prop key="hibernate.bytecode.use_reflection_optimizer">true</prop>
+        <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+        <prop key="hibernate.cache.use_query_cache">false</prop>
+        <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+      </props>
+    </property>
+    <!-- 放宽包名,只要是entity -->
+    <property name="packagesToScan" value="org.ssh.sys.**.entity" />
+    <property name="eventListeners">
+      <map>
+        <entry key="save-update">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.AuditListener" />
+            <bean class="org.hibernate.event.def.DefaultSaveOrUpdateEventListener" />
+          </list>
+        </entry>
+        <entry key="post-insert">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-update">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-delete">
+          <list>
+            <bean class="org.ssh.pm.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+
+      </map>
+    </property>
+  </bean>
+
+  <!-- 事务管理器配置, Hibernate单数据源事务 -->
+  <bean id="defaultTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
+
+  <!-- 事务管理器配置, Hibernate单数据源事务 -->
+  <bean id="sysdataTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sysdataSessionFactory" />
+  </bean>
+
+  <!-- 另一个事务管理器, Jdbc单数据源事务 -->
+  <bean id="quartzTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="quartzDataSource" />
+  </bean>
+
+  <!-- 另一个事务管理器, Jdbc单数据源事务 -->
+  <bean id="jobTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+
+  <!-- 使用annotation定义事务 -->
+  <tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
+
+  <bean
+    class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+</beans>

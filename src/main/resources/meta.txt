@@ -1,0 +1,1 @@
+centralVersion=${project.version}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+  default-lazy-init="true">
+
+  <description>spring read file</description>
+
+  <!-- 用逗号分隔符，并且第一字段叫name，第二个字段叫age  -->
+  <!--
+     sampleSource.txt
+     kinaei,30
+     zoubin,40
+     ZHUTOU,65
+     wufeiran,51
+
+  -->
+  <bean id="reader" class="org.springframework.batch.item.file.FlatFileItemReader">
+    <property name="resource" value="classpath:sampleSource.txt" />
+    <property name="lineMapper" >
+      <bean id="defaultLineMapper" class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="lineTokenizer">
+          <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+            <property name="names">
+              <list>
+                <value>name</value>
+                <value>age</value>
+              </list>
+            </property>
+          </bean>
+        </property>
+        <property name="fieldSetMapper">
+          <bean  class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+            <property name="prototypeBeanName" value="testbean" />
+          </bean>
+        </property>
+
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="writer" class="org.springframework.sample.batch.example.ExampleItemWriter" >
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+
+  <bean id="simpleStep"
+    class="org.springframework.batch.core.step.item.SimpleStepFactoryBean"
+    abstract="true">
+    <property name="transactionManager" ref="transactionManager" />
+    <property name="jobRepository" ref="jobRepository" />
+    <property name="startLimit" value="100" />
+    <property name="commitInterval" value="1" />
+  </bean>
+
+  <bean id="testbean" class="org.ssh.pm.common.utils.TestBean" scope="prototype"/>
+
+</beans>

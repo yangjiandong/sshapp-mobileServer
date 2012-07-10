@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+   "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+   "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+  <definition name="help/showAbout" template="/views/help/showAbout.jsp"/>
+
+  <definition name="default" template="/views/default.jsp"/>
+
+  <!-- Master Page Layout -->
+  <definition name="page" template="/views/layouts/page.jsp"/>
+  <definition name="page_blueprint" template="/views/layouts/page.blueprint.jsp"/>
+
+  <definition name="index_b" extends="page">
+    <put-attribute name="title" value="首页" type="string" />
+    <put-attribute name="content" value="/views/index.bootstrap.jsp" type="template" />
+  </definition>
+
+  <definition name="index" extends="page_blueprint">
+    <put-attribute name="title" value="首页" type="string" />
+    <put-attribute name="content" value="/views/index.blueprint.jsp" type="template" />
+    <put-list-attribute name="styles">
+      <add-attribute value="index.css" />
+    </put-list-attribute>
+    <put-list-attribute name="scripts">
+      <add-attribute value="jquery/jquery-1.4.min.js" />
+    </put-list-attribute>
+  </definition>
+
+  <definition name="load" template="/views/comet/load.jsp"/>
+
+  <definition name="manage" template="/views/manage.jsp"/>
+  <definition name="query" template="/views/query.jsp"/>
+  <definition name="topic" template="/views/topic.jsp"/>
+
+  <definition name="showBook" extends="page">
+    <put-attribute name="title" value="book..." type="string" />
+    <put-attribute name="content" value="/views/book/example.jsp" type="template" />
+  </definition>
+
+  <definition name="showContact" extends="page">
+    <put-attribute name="title" value="contact..." type="string" />
+    <put-attribute name="content" value="/views/book/example.jsp" type="template" />
+  </definition>
+
+  <definition name="comet" template="/views/comet/index.jsp"/>
+
+</tiles-definitions>

@@ -1,0 +1,15 @@
+resourceId,text,url,leaf,parentId,resourceType,orderNo,state,iconCls,note
+1,系统管理,../common/module?parentId=1,0,0,1,1,1,sys,系统用户管理、资源管理、权限管理
+11,系统管理,,0,1,2,11,1,sysCls
+111,角色管理,UI111,1,11,3,111,1,roleCls
+112,用户管理,UI112,1,11,3,112,1,userCls
+113,参数设置,UI113,1,11,3,113,1,setupCls
+114,权限设置,UI114,1,11,3,114,1,setupCls
+115,模块管理,UI115,1,11,3,115,1,setupCls
+
+
+2,移动平台,../common/module?parentId=2,0,0,1,2,1,sys,全院概况、移动护理、移动审批
+21,全院概况,,0,2,2,21,1,sysCls
+211,分院设置,UI211,1,21,3,211,1,commCls
+212,查询指标,UI212,1,21,3,212,1,commCls
+213,自动任务,UI213,1,21,3,213,1,commCls

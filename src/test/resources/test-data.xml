@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <T_Input InputId="99999" BusDate="2011.05.01" Abstract="1" OrgCode="1" InputType="1" CatCode="1" Money="100" AddedWho="test" AddedOn="2011.05.21 10:24:19" states="0" AmortizedMonth="0" UsedBy="1" updatedWho="who" updatedOn="2011.05.21 10:24:19" />
+  <T_Input InputId="99998" BusDate="2011.05.02" Abstract="2" OrgCode="1" InputType="1" CatCode="1" Money="100" AddedWho="test" AddedOn="2011.05.21 10:24:19" states="0" AmortizedMonth="0" UsedBy="1" updatedWho="who" updatedOn="2011.05.21 10:24:19" />
+  <T_Input InputId="99997" BusDate="2011.05.03" Abstract="3" OrgCode="1" InputType="1" CatCode="1" Money="100" AddedWho="test" AddedOn="2011.05.21 10:24:19" states="0" AmortizedMonth="0" UsedBy="1" updatedWho="who" updatedOn="2011.05.21 10:24:19" />
+</dataset>

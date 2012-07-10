@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <SMSPort>1</SMSPort>
+    <SMSFormate>mastudio102%varLen%%parameter%10101111112%length%%content%</SMSFormate>
+    <CheckFormate>%FChecker%请求%FTypeName%</CheckFormate>
+    <SMSShoushu>mastudio102%varLen%%parameter%10101111112%length%%content%</SMSShoushu>
+    <SMSheliyongyao>mastudio102%varLen%%parameter%10101111112%length%%content%</SMSheliyongyao>
+</root>

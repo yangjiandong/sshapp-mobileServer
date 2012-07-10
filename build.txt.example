@@ -1,0 +1,4 @@
+fop.home=D:\\jakarta\\fop-1.0
+cxf.home=D:\\jakarta\\apache-cxf-2.4.5
+cxf.wsdl=http://218.93.119.14:8088/IWisServies.asmx?WSDL
+cxf.wsdl2="wsdl/IWisServies.asmx.xml"

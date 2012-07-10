@@ -1,0 +1,102 @@
+@charset "UTF-8";
+
+.ssbody {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent
+}
+
+body {
+  background-color: #f8f8f8
+}
+
+#resources
+li {
+  margin-bottom: 26px;
+  padding-left: 56px;
+  list-style-type:none
+}
+
+#resources li
+a {
+  font-size: 28px;
+  text-decoration:none;
+}
+
+#resources li
+a:hover, a:active {
+  text-decoration:underline;
+}
+
+#resources li a
+span {
+  color: #6d6d6d;
+  font-size: 10px;
+  font-weight: bold
+}
+
+#resources a,.event-list
+a {
+  color: #126499;
+  display: block;
+  font-weight: bold;
+  padding: 2px 0
+}
+
+/* 分系统图标 */
+#resources
+li.sys {
+  background: url('../img/icon.png') 0 -389px no-repeat;
+
+}
+
+#resources
+li.hcost {
+  background: url('../img/icon.png') 0 -545px no-repeat
+}
+
+#resources
+li.sys2 {
+  background: url('../img/icon.png?1307578171') 0 -244px no-repeat
+}
+
+#resources .sencha-base-desktop,.item-list li.desktop,ul.grid.icons
+li.desktop {
+  background: url('/img/icon.png?1307578171') 0 -389px no-repeat
+}
+
+#resources .sencha-base-gear,.item-list li.gear,ul.grid.icons
+li.gear {
+  background: url('/img/icon.png?1307578171') 0 -545px no-repeat
+}
+
+#resources .sencha-base-cloud,.item-list li.cloud,ul.grid.icons
+li.cloud {
+  background: url('/img/icon.png') 0 -685px no-repeat
+}
+
+#resources .sencha-base-motion,.item-list li.motion,ul.grid.icons
+li.motion {
+  background: url('/img/icon.png?1307578171') 0 -841px no-repeat
+}
+
+#resources .sencha-base-geartool,.item-list li.geartool,ul.grid.icons
+li.geartool {
+  background: url('/img/icon.png?1307578171') 0 -958px no-repeat
+}
+
+input:focus, textarea:focus{
+background: #FFF6AA;
+  background-color: #FFF6AA;
+  border-color: #7eadd9;
+}
+
+#login_loading { display:none;
+  text-align: left;
+  color:#478fb3;
+  width:200px;
+  font-size:14px;}

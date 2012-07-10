@@ -1,0 +1,105 @@
+<table cellpadding="2" cellspacing="1" border="1" style="empty-cells:show">
+
+  <tr bgcolor="$headerBackgroundColor">
+    <td align="center"> $headerFontOn MainTopic $headerFontOff
+    <td align="center"> $headerFontOn # $headerFontOff
+    <td align="center"> $headerFontOn Topic $headerFontOff
+    <td align="center"> $headerFontOn # $headerFontOff
+    <td align="center"> $headerFontOn SubTopic $headerFontOff
+    <td align="center"> $headerFontOn # $headerFontOff
+  </tr>
+
+  #foreach ( $mainTopic_Name in $categoryData.backlogElements.keySet() )
+  
+    #set ( $mainTopic_Category                     = $categoryData.categories.get($mainTopic_Name) )
+    #set ( $mainTopic_Category_BacklogElementCount = $categoryData.backlogElements.get($mainTopic_Name).size() )
+    #set ( $topic_Category_Count                   = $mainTopic_Category.backlogElements.size() )
+  
+    #set ( $rowCount1 = 0 )
+    #foreach ( $topic_Name in $mainTopic_Category.backlogElements.keySet() )
+      #set ( $topic_Category = $mainTopic_Category.categories.get($topic_Name) )
+      #foreach ( $subTopic_Name in $topic_Category.backlogElements.keySet() )
+        #set ( $rowCount1 = $rowCount1 + 1 )
+      #end
+    #end
+
+    #set ( $first1 = 1 )
+
+    #foreach ( $topic_Name in $mainTopic_Category.backlogElements.keySet() )
+  
+      #set ( $topic_Category                     = $mainTopic_Category.categories.get($topic_Name) )
+      #set ( $topic_Category_BacklogElementCount = $mainTopic_Category.backlogElements.get($topic_Name).size() )
+      #set ( $subTopic_Category_Count            = $topic_Category.backlogElements.size() )
+  
+      #set ( $rowCount2 = 0 )
+      #foreach ( $subTopic_Name in $topic_Category.backlogElements.keySet() )
+        #set ( $rowCount2 = $rowCount2 + 1 )
+      #end
+
+      #set ( $first2 = 1 )
+
+      #foreach ( $subTopic_Name in $topic_Category.backlogElements.keySet() )
+    
+        #set ( $subTopic_Category_BacklogElementCount = $topic_Category.backlogElements.get($subTopic_Name).size() )
+    
+        <tr>
+
+          #if ( $first1 == 1 )
+            <td rowspan="$rowCount1" valign="top"> 
+              $plainFontOn 
+              <a href="#$formatter.getAnchorName($mainTopic_Name)">
+              $mainTopic_Name 
+              </a>
+
+              $plainFontOff
+            </td>
+            <td rowspan="$rowCount1" valign="top"
+                bgcolor="$colorScheme.getNextColor($mainTopic_Category_BacklogElementCount, $maxCount)"> 
+              $plainFontOn 
+              $mainTopic_Category_BacklogElementCount
+              $plainFontOff
+            </td>
+            #set ( $first1 = 0 )
+          #end
+    
+          #if ( $first2 == 1 )
+            <td rowspan="$rowCount2" valign="top">
+              <a href="#$formatter.getAnchorName($mainTopic_Name, $topic_Name)">
+
+              $plainFontOn $topic_Name $plainFontOff
+              </a>
+            </td>
+            <td rowspan="$rowCount2" valign="top" 
+                bgcolor="$colorScheme.getNextColor($topic_Category_BacklogElementCount, $maxCount)"> 
+              $plainFontOn $topic_Category_BacklogElementCount $plainFontOff
+            </td>
+            #set ( $first2 = 0 )
+          #end
+    
+          <td valign="top"> 
+            <a href="#$formatter.getAnchorName($mainTopic_Name, $topic_Name, $subTopic_Name)">
+
+            $plainFontOn $subTopic_Name $plainFontOff
+            </a>
+          </td>
+          <td valign="top" bgcolor="$colorScheme.getNextColor($subTopic_Category_BacklogElementCount, $maxCount)"> 
+            $plainFontOn $subTopic_Category_BacklogElementCount $plainFontOff
+          </td>
+        </tr>
+
+      #end
+    
+    #end
+    
+  #end
+
+  <tr bgcolor="$subHeaderBackgroundColor">
+    <td> $plainFontOn <b> Total Count </b> $plainFontOff
+    <td> $plainFontOn <b> $cnt1       </b> $plainFontOff
+    <td> $plainFontOn <b> Total Count </b> $plainFontOff
+    <td> $plainFontOn <b> $cnt2       </b> $plainFontOff
+    <td> $plainFontOn <b> Total Count </b> $plainFontOff
+    <td> $plainFontOn <b> $cnt3       </b> $plainFontOff
+  </tr>
+
+</table><p>

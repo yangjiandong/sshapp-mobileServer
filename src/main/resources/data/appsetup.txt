@@ -1,0 +1,17 @@
+SetupCode,SetupValue,Descrip
+user_AutoRunJob,Y,允许后台自动执行任务否(Y/N)
+user_CheckOutFrom,2,损益表模式(1/2)，1区分病人类别，2不区分病人类别
+user_GetEmployeeCountFrom,1,统计核算单元人数(1/2)，1简单平均，2每日平均
+user_InDrugRateOfNurse,0,门诊或病区护理单元得到药品收入比例(%)
+user_org.code.pattern,1.2.3.3.3.2.2.2,科级核算-核算单元分级代码结构
+user_SalaryReckonMode,1,工资成本核算模式(1-实发计入，2-按科室人数均摊)
+user_edit.by.default,Y,是否仅由全院维护基础字典(Y/N)
+user_hospital.is.army,N,是否军队医院(Y/N)
+user_AutoRun.Bef.Days,1,自动导入前几天的数据，0为当天1为昨天2为前天，依次类推
+user_Hospital.Info,本院,医院信息
+user_Print_rows,20,报表打印每页行数
+user_DrugBuyCostCatCode,C,按药品定额计算药品成本时对应的成本分类
+user_transfer.by.daysonbed,Y,是否采用按床日转移的成本
+user_transfer.allcost,Y,是否转移全部成本(直接和间接成本)
+user_default.page,20,前台列表显示行数
+user_useDrugFactor,Y,是否启用药品转换因子

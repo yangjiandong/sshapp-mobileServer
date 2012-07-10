@@ -1,0 +1,99 @@
+package org.ssh.pm.common.web;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.sun.grizzly.comet.CometContext;
+import com.sun.grizzly.comet.CometEngine;
+import com.sun.grizzly.comet.CometEvent;
+import com.sun.grizzly.comet.CometHandler;
+
+public class HiddenCometServlet extends HttpServlet {
+
+    private final AtomicInteger counter = new AtomicInteger();
+
+    private class CounterHandler implements CometHandler<HttpServletResponse> {
+
+        private HttpServletResponse response;
+
+        public void onEvent(CometEvent event) throws IOException {
+            if (CometEvent.NOTIFY == event.getType()) {
+                int count = counter.get();
+                PrintWriter writer = response.getWriter();
+                writer.write("<script type='text/javascript'>parent.counter.updateCount('" + count + "')</script>\n");
+                writer.flush();
+
+                // commented out the resume if it is Http Streaming
+                event.getCometContext().resumeCometHandler(this);
+            }
+        }
+
+        public void onInitialize(CometEvent event) throws IOException {
+        }
+
+        public void onInterrupt(CometEvent event) throws IOException {
+            removeThisFromContext();
+        }
+
+        public void onTerminate(CometEvent event) throws IOException {
+            removeThisFromContext();
+        }
+
+        public void attach(HttpServletResponse attachment) {
+            this.response = attachment;
+        }
+
+        private void removeThisFromContext() throws IOException {
+            response.getWriter().close();
+            CometContext context = CometEngine.getEngine().getCometContext(contextPath);
+            context.removeCometHandler(this);
+        }
+    }
+
+    private static final long serialVersionUID = 1L;
+
+    private String contextPath = null;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        ServletContext context = config.getServletContext();
+        contextPath = context.getContextPath() + "/servlet/hidden_comet";
+
+        CometEngine engine = CometEngine.getEngine();
+        CometContext cometContext = engine.register(contextPath);
+        cometContext.setExpirationDelay(30 * 1000);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
+        CounterHandler handler = new CounterHandler();
+        handler.attach(res);
+
+        CometEngine engine = CometEngine.getEngine();
+        CometContext context = engine.getCometContext(contextPath);
+
+        context.addCometHandler(handler);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
+        counter.incrementAndGet();
+
+        CometEngine engine = CometEngine.getEngine();
+        CometContext<?> context = engine.getCometContext(contextPath);
+        context.notify(null);
+        req.getRequestDispatcher("button.html").forward(req, res);
+    }
+
+}

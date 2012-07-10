@@ -42,7 +42,7 @@ public class User extends AuditableEntity implements Serializable {
     private String name;
     @ViewField(header = "状态", width = 120)
     private String status;
-    @ViewField(header = "邮箱", width = 180)
+    @ViewField()
     private String email;
     @ViewField
     private Integer version;
@@ -54,15 +54,19 @@ public class User extends AuditableEntity implements Serializable {
     private String updatePwd;
     @ViewField
     private String telNumber;
-    @ViewField
+    @ViewField(header = "手机", width = 120)
     private String mobileNo;
 
     //his信息
     private String userNo;
+    @ViewField()
     private String departNo;
+    @ViewField()
     private String departName;
     private String title;
     private String job;
+
+    private String mobmodules;
 
     //有序的关联对象集合
     private List<Role> roleList = Lists.newArrayList();
@@ -268,5 +272,14 @@ public class User extends AuditableEntity implements Serializable {
 
     public void setJob(String job) {
         this.job = job;
+    }
+
+    @Transient
+    public String getMobmodules() {
+        return mobmodules;
+    }
+
+    public void setMobmodules(String mobmodules) {
+        this.mobmodules = mobmodules;
     }
 }

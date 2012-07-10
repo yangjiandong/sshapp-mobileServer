@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 //
 @Entity
-@Table(name = "sms_checkLog")
+@Table(name = "SMS_CheckLog")
 public class CheckLog {
     private Long id;
     private int type;

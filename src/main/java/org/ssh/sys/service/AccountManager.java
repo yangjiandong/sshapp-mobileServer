@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
 
 import net.sf.json.JSONObject;
 
@@ -14,17 +15,18 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.dozer.DozerBeanMapper;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.memcached.SpyMemcachedClient;
-import org.springside.modules.orm.hibernate.HibernateDao;
 import org.springside.modules.security.utils.DigestUtils;
 import org.springside.modules.utils.ServiceException;
+import org.springside.modules.utils.spring.SpringContextHolder;
 import org.ssh.pm.common.cache.MemcachedObjectType;
 import org.ssh.pm.common.jms.simple.NotifyMessageProducer;
 import org.ssh.pm.common.jmx.server.ServerConfig;
@@ -43,7 +45,6 @@ import org.ssh.sys.entity.Role;
 import org.ssh.sys.entity.User;
 import org.ssh.sys.entity.UserLog;
 import org.ssh.sys.entity.UserSessionIds;
-import org.ssh.sys.entity.his.HisUser;
 
 import com.ek.mobileapp.model.UserDTO;
 
@@ -81,7 +82,6 @@ public class AccountManager {
     private UserLogDao userLogDao;
     @Autowired
     private DozerBeanMapper dozer;
-
 
     /**
      * 在保存用户时,发送用户修改通知消息, 由消息接收者异步进行较为耗时的通知邮件发送.
@@ -381,6 +381,27 @@ public class AccountManager {
                         if (!org.apache.commons.lang3.StringUtils.isBlank(type)) {
                             uLog.setTypes(type);
 
+                            //授权手机模块
+                            DataSource dataSource = (DataSource) SpringContextHolder.getBean("sysDataSource");
+                            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+                            StringBuffer sql = new StringBuffer(512);
+
+                            sql.setLength(0);
+                            sql.append("select code,name from mob_moduleDict a where code in( ");
+                            sql.append(" select moduleCode from mob_RoleModules where roleid in( ");
+                            sql.append(" select role_id from t_user_role where user_id=?))");
+                            SqlRowSet srs1 = jdbcTemplate.queryForRowSet(sql.toString(), user.getId());
+                            StringBuffer all = new StringBuffer();
+                            boolean first = true;
+                            while (srs1.next()) {
+                                if (first) {
+                                    first = false;
+                                } else {
+                                    all.append(",");
+                                }
+                                all.append(srs1.getString(1) + "|" + srs1.getString(2));
+                            }
+                            user.setMobmodules(all.toString());
                             UserDTO u = dozer.map(user, UserDTO.class);
 
                             map.put("user", u);

@@ -735,11 +735,17 @@ public class SystemController {
         if (u == null) {
             pro = false;
         } else {
+            //mobile
+            String type = request.getParameter("type");
+
             UserLog uLog = new UserLog();
             uLog.setUserId(u.getAccount().getId());
             uLog.setCreateTime(accountManager.getNowString());
             uLog.setEvents(infos);
             uLog.setNetIp(u.getClientIp());
+            if (!org.apache.commons.lang3.StringUtils.isBlank(type)) {
+                uLog.setTypes(type);
+            }
             userLogService.save(uLog);
         }
         re.put("success", pro);

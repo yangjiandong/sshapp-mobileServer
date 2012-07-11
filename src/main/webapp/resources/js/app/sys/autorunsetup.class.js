@@ -32,6 +32,7 @@ Divo.app.AutoRunSetupClass = function(config) {
 
     grid = new Divo.Base.GridView({
           gridId : gridEl,
+          pageSize : 30,
           entityName : dbo,
           queryFlds : queryFlds,
           searchFlds : searchFlds,

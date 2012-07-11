@@ -27,6 +27,7 @@ import org.ssh.pm.enums.CoreConstants;
 import org.ssh.pm.hcost.web.UserSession;
 import org.ssh.pm.mob.service.AutoRunSetupService;
 import org.ssh.pm.mob.service.ModuleDictService;
+import org.ssh.pm.mob.service.QueryItemService;
 import org.ssh.pm.orm.hibernate.CustomerContextHolder;
 import org.ssh.sys.entity.Resource;
 import org.ssh.sys.service.AccountManager;
@@ -54,6 +55,8 @@ public class CommonController {
     private AutoRunSetupService autoRunSetupService;
     @Autowired
     private ModuleDictService moduleDictService;
+    @Autowired
+    private QueryItemService queryItemService;
 
     @Autowired
     private MigrationService migrationService;
@@ -190,6 +193,13 @@ public class CommonController {
         } catch (Exception se) {
             logger.error("cuco ...");
             data.add(new Bean(false, "执行方式初始数据失败!" + se.toString(), ""));
+        }
+        try {
+            this.queryItemService.initData();
+            data.add(new Bean(true, "全院概况指标初始数据成功!", ""));
+        } catch (Exception se) {
+            logger.error("cuco ...");
+            data.add(new Bean(false, "全院概况指标初始数据失败!" + se.toString(), ""));
         }
         logger.info(" 执行共计:" + (System.currentTimeMillis() - start) + " ms");
         dblogger.info(" 执行共计:" + (System.currentTimeMillis() - start) + " ms");

@@ -34,6 +34,7 @@ Divo.app.ModuleDictList = function() {
 
     grid1 = new Divo.Base.GridView({
           gridId : gridEl1,
+          pageSize : 200,
           entityName : dbo1,
           queryFlds : queryFlds,
           searchFlds : searchFlds,

@@ -20,12 +20,11 @@ import org.springside.modules.utils.ServiceException;
 import org.ssh.pm.enums.CoreConstants;
 import org.ssh.pm.mob.MobConstants;
 import org.ssh.pm.mob.dao.HospitalTypeDao;
-import org.ssh.pm.mob.dao.QueryItemDao;
 import org.ssh.pm.mob.dao.ItemSourceDao;
+import org.ssh.pm.mob.dao.QueryItemDao;
 import org.ssh.pm.mob.entity.HospitalType;
-import org.ssh.pm.mob.entity.ModuleDict;
-import org.ssh.pm.mob.entity.QueryItem;
 import org.ssh.pm.mob.entity.ItemSource;
+import org.ssh.pm.mob.entity.QueryItem;
 
 @Service
 @Transactional

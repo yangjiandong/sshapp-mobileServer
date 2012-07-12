@@ -15,20 +15,21 @@
    1. 服务端
 
    controller:
-
       QueryItemController,
-
       ImportController,
-
       QueryController
+
+   entity:
+      QueryItem
+      QueryData
 
    2. 客户端
 
    QueryAction
-
    QueryActivity
 
    3. 自动任务
+
    在维护界面显示的指标参数,需要在存储过程中写入mob_querydata表的itemid字段中
    如果有分院,需要在存储过程中将医院编号写入mob_querydata表的hospid字段中
 

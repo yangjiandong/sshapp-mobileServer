@@ -7,23 +7,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springside.modules.utils.JsonViewUtil;
 import org.ssh.pm.common.utils.JSONResponseUtil;
-import org.ssh.pm.hcost.web.UserSession;
 import org.ssh.pm.mob.entity.CronType;
-import org.ssh.pm.mob.entity.HospitalType;
-import org.ssh.pm.mob.entity.QueryItem;
 import org.ssh.pm.mob.entity.ItemSource;
 import org.ssh.pm.mob.service.AutoRunSetupService;
-import org.ssh.pm.mob.service.QueryItemService;
 import org.ssh.pm.orm.hibernate.CustomerContextHolder;
 import org.ssh.sys.web.CommonController;
 

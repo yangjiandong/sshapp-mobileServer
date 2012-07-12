@@ -1,0 +1,37 @@
+生命体征
+========
+
+需求
+----
+
+   1. 针对不同his,可以自定义时间点和测量类别
+
+   2. 生命体征的指标允许自定义
+
+   3. 生命体征通过中间表Mob_VitalSignData来实现his数据的获取和提交.state字段用来标记数据是否要提交给his
+
+
+设计
+----
+
+   1. 服务端
+
+   VitalSignController
+
+   2. 客户端
+   timepointlist.js
+   measuretypelist.js
+   vitalsignitemlist.js
+
+
+后台表
+------
+
+   --TODO
+   --考虑是否采用统一实体表,通过类别区分
+   Mob_VitalSignData 生命体征数据
+   Mob_TimePoint 时间点
+   Mob_MeasureType 测量类别
+   Mob_VitalSignItem 生命体征指标
+
+

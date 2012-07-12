@@ -43,7 +43,6 @@ public class Resource {
         this.resourceId = resourceId;
     }
 
-    @Column(length = 200)
     public String getNote() {
         return note;
     }
@@ -103,7 +102,7 @@ public class Resource {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 200)
     public String getText() {
         return text;
     }

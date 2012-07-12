@@ -7,9 +7,15 @@ resourceId,text,url,leaf,parentId,resourceType,orderNo,state,iconCls,note
 114,权限设置,UI114,1,11,3,114,1,setupCls
 115,模块管理,UI115,1,11,3,115,1,setupCls
 
-
-2,移动平台,../common/module?parentId=2,0,0,1,2,1,sys,全院概况、移动护理、移动审批
+2,移动平台,../common/module?parentId=2,0,0,1,2,1,sys,移动平台后台服务维护.如全院概况、移动护理、移动审批等模块的参数设置
 21,全院概况,,0,2,2,21,1,sysCls
 211,分院设置,UI211,1,21,3,211,1,commCls
 212,查询指标,UI212,1,21,3,212,1,commCls
 213,自动任务,UI213,1,21,3,213,1,commCls
+
+22,移动护理,,0,2,2,22,1,sysCls
+221,时间点定义,UI221,1,22,3,221,1,commCls
+222,测量类型,UI222,1,22,3,222,1,commCls
+223,生命体征指标,UI223,1,22,3,223,1,commCls
+
+29,用户日志,UI223,1,2,3,29,1,commCls

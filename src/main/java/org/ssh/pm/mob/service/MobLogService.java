@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.orm.hibernate.HibernateDao;
 import org.springside.modules.utils.ServiceException;
 import org.ssh.pm.mob.entity.MobLog;
+import org.ssh.pm.nurse.service.VitalSignService;
 
 @Service
 @Transactional

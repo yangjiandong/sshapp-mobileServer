@@ -1,5 +1,10 @@
-package org.ssh.pm.mob.service;
+package org.ssh.pm.query.service;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,17 +19,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.utils.ServiceException;
 import org.ssh.pm.enums.CoreConstants;
 import org.ssh.pm.mob.MobConstants;
-import org.ssh.pm.mob.dao.HospitalTypeDao;
-import org.ssh.pm.mob.dao.QueryItemDao;
 import org.ssh.pm.mob.dao.ItemSourceDao;
-import org.ssh.pm.mob.entity.HospitalType;
-import org.ssh.pm.mob.entity.QueryItem;
 import org.ssh.pm.mob.entity.ItemSource;
+import org.ssh.pm.query.dao.HospitalTypeDao;
+import org.ssh.pm.query.dao.QueryItemDao;
+import org.ssh.pm.query.entity.HospitalType;
+import org.ssh.pm.query.entity.QueryItem;
 
 @Service
 @Transactional
-public class QueryService {
-    private static Logger logger = LoggerFactory.getLogger(QueryService.class);
+public class QueryItemService {
+    private static Logger logger = LoggerFactory.getLogger(QueryItemService.class);
 
     @Autowired
     private HospitalTypeDao hospitalTypeDao;
@@ -32,6 +37,96 @@ public class QueryService {
     private QueryItemDao queryItemDao;
     @Autowired
     private ItemSourceDao queryItemSourceDao;
+
+    // 初始化,导入全院概况指标
+    public void initData() throws ServiceException {
+        // 判断新增
+        logger.debug("开始装载全院概况指标初始数据");
+
+        File resourcetxt = new File(this.getClass().getResource("/data/queryitem.txt").getFile());
+        String star[] = {};
+        try {
+            FileInputStream fis = new FileInputStream(resourcetxt);
+            String thisLine;
+
+            DataInputStream myInput = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(myInput, "UTF-8"));
+
+            QueryItem re;
+            int line = 1;
+            while ((thisLine = br.readLine()) != null) {
+                // 第一行是标题
+                if (line == 1) {
+                    line++;
+                    continue;
+                }
+                star = thisLine.split(",");
+                if (star[0].trim().equals(""))
+                    continue;
+
+                if (queryItemDao.findUniqueBy("id", Long.valueOf(star[0].trim())) != null)
+                    continue;
+
+                re = new QueryItem();
+                re.setId(Long.valueOf(star[0].trim()));
+                re.setItemName(star[1].trim());
+                re.setCodeLevel(Long.valueOf(star[2].trim()));
+                re.setIsleaf(star[3].trim());
+                re.setParentId(Long.valueOf(star[4].trim()));
+                this.queryItemDao.save(re);
+            }
+            initData2();
+        } catch (Exception e) {
+            logger.error("str[]:" + StringUtils.join(star, ","));
+            logger.error("装载全院概况指标数据出错:" + e);
+            throw new ServiceException("导入全院概况指标时，服务器发生异常");
+        } finally {
+
+        }
+    }
+
+    // 初始化,导入全院概况指标数据源
+    public void initData2() throws ServiceException {
+        // 判断新增
+        logger.debug("开始装载全院概况指标数据源初始数据");
+
+        queryItemSourceDao.batchExecute("delete from ItemSource ");
+        File resourcetxt = new File(this.getClass().getResource("/data/itemsource.txt").getFile());
+        String star[] = {};
+        try {
+            FileInputStream fis = new FileInputStream(resourcetxt);
+            String thisLine;
+
+            DataInputStream myInput = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(myInput, "UTF-8"));
+
+            ItemSource re;
+            int line = 1;
+            while ((thisLine = br.readLine()) != null) {
+                // 第一行是标题
+                if (line == 1) {
+                    line++;
+                    continue;
+                }
+                star = thisLine.split(",");
+                if (star[0].trim().equals(""))
+                    continue;
+
+                re = new ItemSource();
+                re.setItemId(Long.valueOf(star[0].trim()));
+                re.setItemName(star[1].trim());
+                re.setSpName(star[2].trim());
+                re.setTypeCode(star[3].trim());
+                this.queryItemSourceDao.save(re);
+            }
+        } catch (Exception e) {
+            logger.error("str[]:" + StringUtils.join(star, ","));
+            logger.error("装载全院概况指标数据源数据出错:" + e);
+            throw new ServiceException("导入全院概况指标数据源时，服务器发生异常");
+        } finally {
+
+        }
+    }
 
     public List<HospitalType> queryHospital() {
 
@@ -148,9 +243,11 @@ public class QueryService {
         QueryItem entity = null;
         try {
             if (StringUtils.isBlank(id)) {
+                Long newId = queryItemDao.getNewId();
                 QueryItem a = queryItemDao.findUniqueBy("id", Long.valueOf(parentId));
                 if (a == null) {
                     entity = new QueryItem();
+                    entity.setId(newId);
                     entity.setItemName(itemName);
                     entity.setIsleaf(CoreConstants.ACTIVE);
                     entity.setCodeLevel(1L);
@@ -158,6 +255,7 @@ public class QueryService {
                     queryItemDao.save(entity);
                 } else {
                     entity = new QueryItem();
+                    entity.setId(newId);
                     entity.setItemName(itemName);
                     entity.setIsleaf(CoreConstants.ACTIVE);
                     entity.setCodeLevel(a.getCodeLevel() + 1L);
@@ -196,6 +294,7 @@ public class QueryService {
                 }
 
             }
+            queryItemSourceDao.batchExecute("delete from ItemSource where itemId = ? ", id);
 
             queryItemDao.batchExecute("delete from QueryItem where id = ? or parentId = ? ", id, id);
 

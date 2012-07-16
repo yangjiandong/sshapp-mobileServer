@@ -1,4 +1,4 @@
-package org.ssh.pm.mob.web;
+package org.ssh.pm.nurse.web;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,54 +7,49 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springside.modules.utils.JsonViewUtil;
 import org.ssh.pm.common.utils.JSONResponseUtil;
-import org.ssh.pm.hcost.web.UserSession;
-import org.ssh.pm.mob.entity.HospitalType;
-import org.ssh.pm.mob.entity.QueryItem;
-import org.ssh.pm.mob.entity.ItemSource;
-import org.ssh.pm.mob.service.QueryItemService;
+import org.ssh.pm.nurse.entity.MeasureType;
+import org.ssh.pm.nurse.entity.TimePoint;
+import org.ssh.pm.nurse.entity.VitalSignItem;
+import org.ssh.pm.nurse.service.VitalSignService;
 import org.ssh.pm.orm.hibernate.CustomerContextHolder;
 import org.ssh.sys.web.CommonController;
 
 @Controller
-@RequestMapping("/query_item")
-public class QueryItemController {
-    private static Logger logger = LoggerFactory.getLogger(QueryItemController.class);
+@RequestMapping("/vital_sign")
+public class VitalSignController {
+    private static Logger logger = LoggerFactory.getLogger(VitalSignController.class);
 
     @Autowired
-    private QueryItemService queryItemService;
+    private VitalSignService vitalSignService;
 
-    @RequestMapping("/query_hospital")
-    public void queryHospital(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping("/query_time_point")
+    public void queryTimePoint(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws Exception {
         CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
-        List<HospitalType> data = queryItemService.queryHospital();
+        List<TimePoint> data = vitalSignService.queryTimePoint();
 
         JSONResponseUtil.buildJSONDataResponse(response, data, (long) data.size());
     }
 
-    @RequestMapping("/save_hospital")
-    public void saveHospital(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping("/save_time_point")
+    public void saveTimePoint(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
         String id = request.getParameter("id");
+        String code = request.getParameter("code");
         String name = request.getParameter("name");
-
-        UserSession u = (UserSession) request.getSession().getAttribute("userSession");
 
         try {
 
-            String error = queryItemService.validHospital(id, name);
+            String error = vitalSignService.validPoint(id, code, name);
             if (error.length() == 0) {
-                queryItemService.saveHospital(id, name);
+                vitalSignService.saveTimePoint(id, code, name);
                 map.put("success", true);
                 map.put("message", "");
             } else {
@@ -70,14 +65,14 @@ public class QueryItemController {
         JSONResponseUtil.buildCustomJSONDataResponse(response, map);
     }
 
-    @RequestMapping("/delete_hospital")
-    public void deleteHospital(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping("/delete_time_point")
+    public void deleteTimePoint(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
         String id = request.getParameter("id");
         try {
 
-            queryItemService.deleteHospital(Long.valueOf(id));
+            vitalSignService.deleteTimePoint(Long.valueOf(id));
             map.put("success", true);
             map.put("message", "");
 
@@ -88,105 +83,28 @@ public class QueryItemController {
         JSONResponseUtil.buildCustomJSONDataResponse(response, map);
     }
 
-    /**
-     * 获取全部(tree使用)
-     */
-    @RequestMapping("/query_tree")
-    public void queryItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Map<String, Object> map = new HashMap<String, Object>();
-        try {
-            CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
-
-            List<JSONObject> data = queryItemService.queryItem();
-            map.put("success", true);
-            map.put("data", data);
-        } catch (Exception e) {
-            map.put("success", false);
-            map.put("data", null);
-        }
-        JsonViewUtil.buildCustomJSONDataResponse(response, map);
-    }
-
-    @RequestMapping("/query_item2")
-    public void queryItem2(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping("/query_measure_type")
+    public void queryMeasureType(ModelMap map, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
         CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
-        String id = request.getParameter("id");
-        List<QueryItem> data = queryItemService.queryItem2(id);
+        List<MeasureType> data = vitalSignService.queryMeasureType();
 
         JSONResponseUtil.buildJSONDataResponse(response, data, (long) data.size());
     }
 
-    @RequestMapping("/save_item")
-    public void saveItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping("/save_measure_type")
+    public void saveMeasureType(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
-
         String id = request.getParameter("id");
-        String itemName = request.getParameter("itemName");
-        String codeLevel = request.getParameter("codeLevel");
-        String parentId = request.getParameter("parentId");
+        String code = request.getParameter("code");
+        String name = request.getParameter("name");
 
         try {
 
-            String error = queryItemService.valid(id, itemName);
+            String error = vitalSignService.validMeasureType(id, code, name);
             if (error.length() == 0) {
-                QueryItem entity = queryItemService.saveItem(id, itemName, codeLevel, parentId);
-                map.put("success", true);
-                map.put("result", entity);
-                map.put("message", "");
-            } else {
-                map.put("success", false);
-                map.put("message", error);
-            }
-
-        } catch (Exception e) {
-            map.put("success", false);
-            map.put("message", e.getMessage());
-        }
-        JSONResponseUtil.buildCustomJSONDataResponse(response, map);
-    }
-
-    @RequestMapping("/delete_item")
-    public void deleteItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Map<String, Object> map = new HashMap<String, Object>();
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
-        String id = request.getParameter("id");
-        try {
-
-            queryItemService.deleteItem(Long.valueOf(id));
-            map.put("success", true);
-            map.put("message", "");
-
-        } catch (Exception e) {
-            map.put("success", false);
-            map.put("message", e.getMessage());
-        }
-        JSONResponseUtil.buildCustomJSONDataResponse(response, map);
-    }
-
-    @RequestMapping("/query_source")
-    public void querySource(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
-        String id = request.getParameter("itemId");
-        List<ItemSource> data = queryItemService.querySource(id);
-
-        JSONResponseUtil.buildJSONDataResponse(response, data, (long) data.size());
-    }
-
-    @RequestMapping("/save_source")
-    public void saveSource(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Map<String, Object> map = new HashMap<String, Object>();
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
-
-        String id = request.getParameter("id");
-        String itemId = request.getParameter("itemId");
-        String spName = request.getParameter("spName");
-
-        try {
-
-            String error = queryItemService.validSource(id, itemId, spName);
-            if (error.length() == 0) {
-                queryItemService.saveSource(id, itemId, spName);
+                vitalSignService.saveMeasureType(id, code, name);
                 map.put("success", true);
                 map.put("message", "");
             } else {
@@ -195,20 +113,21 @@ public class QueryItemController {
             }
 
         } catch (Exception e) {
+            logger.error(e.getMessage());
             map.put("success", false);
             map.put("message", e.getMessage());
         }
         JSONResponseUtil.buildCustomJSONDataResponse(response, map);
     }
 
-    @RequestMapping("/delete_source")
-    public void deleteSource(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping("/delete_measure_type")
+    public void deleteMeasureType(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
         String id = request.getParameter("id");
         try {
 
-            queryItemService.deleteSource(Long.valueOf(id));
+            vitalSignService.deleteMeasureType(Long.valueOf(id));
             map.put("success", true);
             map.put("message", "");
 
@@ -218,4 +137,64 @@ public class QueryItemController {
         }
         JSONResponseUtil.buildCustomJSONDataResponse(response, map);
     }
+
+
+    @RequestMapping("/query_vitalsign_item")
+    public void queryVitalSignItem(ModelMap map, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+        List<VitalSignItem> data = vitalSignService.queryVitalSignItem();
+
+        JSONResponseUtil.buildJSONDataResponse(response, data, (long) data.size());
+    }
+
+    @RequestMapping("/save_vitalsign_item")
+    public void saveVitalSignItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+        String id = request.getParameter("id");
+        String code = request.getParameter("code");
+        String name = request.getParameter("name");
+        String unit = request.getParameter("unit");
+        String typeCode = request.getParameter("typeCode");
+
+
+        try {
+
+            String error = vitalSignService.validVitalSignItem(id, code, name);
+            if (error.length() == 0) {
+                vitalSignService.saveVitalSignItem(id, code, name,unit,typeCode);
+                map.put("success", true);
+                map.put("message", "");
+            } else {
+                map.put("success", false);
+                map.put("message", error);
+            }
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        JSONResponseUtil.buildCustomJSONDataResponse(response, map);
+    }
+
+    @RequestMapping("/delete_vitalsign_item")
+    public void deleteVitalSignItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+        String id = request.getParameter("id");
+        try {
+
+            vitalSignService.deleteVitalSignItem(Long.valueOf(id));
+            map.put("success", true);
+            map.put("message", "");
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        JSONResponseUtil.buildCustomJSONDataResponse(response, map);
+    }
+
 }

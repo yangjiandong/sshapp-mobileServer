@@ -1,10 +1,10 @@
-package org.ssh.pm.mob.dao;
+package org.ssh.pm.query.dao;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.springside.modules.orm.hibernate.HibernateDao;
-import org.ssh.pm.mob.entity.QueryItem;
+import org.ssh.pm.query.entity.QueryItem;
 
 @Repository("queryItemDao")
 public class QueryItemDao extends HibernateDao<QueryItem, Long> {

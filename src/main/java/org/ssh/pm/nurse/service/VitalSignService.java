@@ -1,4 +1,4 @@
-package org.ssh.pm.mob.service;
+package org.ssh.pm.nurse.service;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -14,12 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.utils.ServiceException;
-import org.ssh.pm.mob.dao.MeasureTypeDao;
-import org.ssh.pm.mob.dao.TimePointDao;
-import org.ssh.pm.mob.dao.VitalSignItemDao;
-import org.ssh.pm.mob.entity.MeasureType;
-import org.ssh.pm.mob.entity.TimePoint;
-import org.ssh.pm.mob.entity.VitalSignItem;
+import org.ssh.pm.nurse.dao.MeasureTypeDao;
+import org.ssh.pm.nurse.dao.TimePointDao;
+import org.ssh.pm.nurse.dao.VitalSignItemDao;
+import org.ssh.pm.nurse.entity.MeasureType;
+import org.ssh.pm.nurse.entity.TimePoint;
+import org.ssh.pm.nurse.entity.VitalSignItem;
 
 @Service
 @Transactional

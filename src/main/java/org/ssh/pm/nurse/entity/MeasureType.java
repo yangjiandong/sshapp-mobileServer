@@ -1,4 +1,4 @@
-package org.ssh.pm.mob.entity;
+package org.ssh.pm.nurse.entity;
 
 import java.io.Serializable;
 
@@ -11,21 +11,18 @@ import javax.persistence.Table;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springside.modules.orm.grid.ViewField;
 
+//测量类别
 @Entity
-@Table(name = "Mob_VitalSignItem")
-public class VitalSignItem implements Serializable {
+@Table(name = "Mob_MeasureType")
+public class MeasureType implements Serializable {
 
-    private static final long serialVersionUID = -6232045729105276809L;
+    private static final long serialVersionUID = 9092644027891064536L;
     @ViewField
     private Long id;
     @ViewField(header = "编号")
     private String code;
-    @ViewField(header = "体征指标")
+    @ViewField(header = "测量类型")
     private String name;
-    @ViewField(header = "单位")
-    private String unit;
-    @ViewField
-    private String typeCode;
 
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -55,22 +52,6 @@ public class VitalSignItem implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public String getTypeCode() {
-        return typeCode;
-    }
-
-    public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode;
     }
 
 }

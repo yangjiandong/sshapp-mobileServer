@@ -1,4 +1,4 @@
-package org.ssh.pm.mob.entity;
+package org.ssh.pm.query.entity;
 
 import java.io.Serializable;
 
@@ -7,21 +7,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springside.modules.orm.grid.ViewField;
 
-//测量类别
 @Entity
-@Table(name = "Mob_MeasureType")
-public class MeasureType implements Serializable {
+@Table(name = "Mob_HospitalType")
+public class HospitalType implements Serializable {
 
-    private static final long serialVersionUID = 9092644027891064536L;
-    @ViewField
-    private Long id;
+    private static final long serialVersionUID = 461139665300881018L;
     @ViewField(header = "编号")
-    private String code;
-    @ViewField(header = "测量类型")
+    private Long id;
+    @ViewField(header = "医院名称 ")
     private String name;
 
     public String toString() {
@@ -29,21 +27,14 @@ public class MeasureType implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "Id_Generator")
+    @TableGenerator(name = "Id_Generator", table = "ID_GENERATOR", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VAL", pkColumnValue = "Mob_HospitalType", initialValue = 1, allocationSize = 1)
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {

@@ -1,4 +1,4 @@
-package org.ssh.pm.mob.entity;
+package org.ssh.pm.query.entity;
 
 import java.io.Serializable;
 

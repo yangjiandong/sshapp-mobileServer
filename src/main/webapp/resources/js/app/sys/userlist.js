@@ -674,7 +674,7 @@ Divo.app.UserList = function() {
               }, '-', {
                 xtype : "button",
                 cls : "x-btn-icon",
-                icon : "resources/img/negative.gif",
+                icon : "resources/img/user.gif",
                 tooltip : "同步his用户",
                 id : "tlb_IMPORTHISUSER",
                 handler : importHisUser

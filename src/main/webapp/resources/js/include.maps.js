@@ -14,4 +14,5 @@ function initUiDcIncludes(m) {
   m.add("UI222", ["app/mob/measuretypelist.js"]);
   m.add("UI223", ["app/mob/vitalsignitemlist.js"]);
 
+  m.add("UI99", ["app/mob/moblog_list.js"]);
 }

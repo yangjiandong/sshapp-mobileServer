@@ -20,17 +20,17 @@ public class MobLog implements Serializable {
     private static final long serialVersionUID = -7991345612891933364L;
     @ViewField
     private Long id;
-    @ViewField(header = "编号")
+    @ViewField()
     private Long userId;
-    @ViewField
+    @ViewField(header = "ip")
     private String netIp;
-    @ViewField
+    @ViewField(header = "时间",width = 150)
     private String createTime;
-    @ViewField
+    @ViewField(header = "事件", width = 200)
     private String event;
-    @ViewField
+    @ViewField(header = "详情", width = 400)
     private String note;
-    @ViewField
+    @ViewField(header = "类型")
     private String type;
     @ViewField
     private String from;

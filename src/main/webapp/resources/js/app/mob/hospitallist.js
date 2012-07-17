@@ -104,7 +104,7 @@ Divo.app.HospitalTypeList = function() {
           entityName : dbo,
           queryFlds : queryFlds,
           searchFlds : searchFlds,
-          packageName : 'pm.mob',
+          packageName : 'pm.query',
           queryUrl : 'query_item/query_hospital',
           deleteUrl : 'query_item/delete_hospital',
           jsonId : 'id',

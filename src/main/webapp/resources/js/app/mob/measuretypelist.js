@@ -117,7 +117,7 @@ Divo.app.MeasureTypeList = function() {
           entityName : dbo,
           queryFlds : queryFlds,
           searchFlds : searchFlds,
-          packageName : 'pm.mob',
+          packageName : 'pm.nurse',
           queryUrl : 'vital_sign/query_measure_type',
           deleteUrl : 'vital_sign/delete_measure_type',
           jsonId : 'id',

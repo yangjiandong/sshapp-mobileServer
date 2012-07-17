@@ -18,4 +18,4 @@ resourceId,text,url,leaf,parentId,resourceType,orderNo,state,iconCls,note
 222,测量类型,UI222,1,22,3,222,1,commCls
 223,生命体征指标,UI223,1,22,3,223,1,commCls
 
-29,用户日志,UI223,1,2,3,29,1,commCls
+99,用户日志,UI99,1,2,3,99,1,commCls

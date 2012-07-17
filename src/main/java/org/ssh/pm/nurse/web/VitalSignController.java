@@ -7,15 +7,19 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.ssh.pm.common.utils.JSONResponseUtil;
 import org.ssh.pm.nurse.entity.MeasureType;
+import org.ssh.pm.nurse.entity.Patient;
 import org.ssh.pm.nurse.entity.TimePoint;
+import org.ssh.pm.nurse.entity.VitalSignData;
 import org.ssh.pm.nurse.entity.VitalSignItem;
 import org.ssh.pm.nurse.service.VitalSignService;
 import org.ssh.pm.orm.hibernate.CustomerContextHolder;
@@ -138,7 +142,6 @@ public class VitalSignController {
         JSONResponseUtil.buildCustomJSONDataResponse(response, map);
     }
 
-
     @RequestMapping("/query_vitalsign_item")
     public void queryVitalSignItem(ModelMap map, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
@@ -158,12 +161,11 @@ public class VitalSignController {
         String unit = request.getParameter("unit");
         String typeCode = request.getParameter("typeCode");
 
-
         try {
 
             String error = vitalSignService.validVitalSignItem(id, code, name);
             if (error.length() == 0) {
-                vitalSignService.saveVitalSignItem(id, code, name,unit,typeCode);
+                vitalSignService.saveVitalSignItem(id, code, name, unit, typeCode);
                 map.put("success", true);
                 map.put("message", "");
             } else {
@@ -195,6 +197,117 @@ public class VitalSignController {
             map.put("message", e.getMessage());
         }
         JSONResponseUtil.buildCustomJSONDataResponse(response, map);
+    }
+
+    @RequestMapping("/get_patient")
+    public void getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+
+        try {
+            String patientId = request.getParameter("patientId");
+            Patient p = null;
+            if (StringUtils.isNotBlank(patientId)) {
+                p = vitalSignService.getPatient(patientId);
+            }
+
+            if (p != null) {
+                map.put("success", true);
+                map.put("message", "");
+                map.put("Patient", p);
+            } else {
+                map.put("success", false);
+                map.put("message", "病人信息不存在");
+            }
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        JSONResponseUtil.buildCustomJSONDataResponse(response, map);
+    }
+
+    @RequestMapping("/get_vitalsign_data_all")
+    public @ResponseBody
+    Map<String, Object> getVitalSignData_all(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+
+        try {
+            String patientId = request.getParameter("patientId");
+            String busDate = request.getParameter("busDate");
+            List<VitalSignData> list = vitalSignService.getVitalSignData_all(patientId, busDate);
+            if (list != null && list.size() > 0) {
+                map.put("success", true);
+                map.put("message", "");
+                map.put("VitalSignData", list);
+            }
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+    }
+
+    @RequestMapping("/get_vitalsign_data_one")
+    public @ResponseBody
+    Map<String, Object> getVitalSignData_one(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+
+        try {
+
+            List<VitalSignData> list = vitalSignService.getVitalSignData(request);
+            if (list != null && list.size() > 0) {
+                map.put("success", true);
+                map.put("message", "");
+                map.put("VitalSignData", list);
+            }
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+    }
+
+    @RequestMapping("/save_vitalsign_data")
+    public @ResponseBody
+    Map<String, Object> saveVitalSignData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+
+        try {
+
+            vitalSignService.saveVitalSignData(request);
+
+            map.put("success", true);
+            map.put("message", "");
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+    }
+
+    @RequestMapping("/get_vitalsign_item")
+    public @ResponseBody
+    Map<String, Object> getVitalSignItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<VitalSignItem> data = null;
+        try {
+            data = vitalSignService.getVitalSignItem(request);
+            map.put("success", true);
+            map.put("message", "");
+            map.put("VitalSignItem", data);
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
     }
 
 }

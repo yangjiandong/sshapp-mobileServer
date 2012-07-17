@@ -34,4 +34,5 @@
    Mob_MeasureType 测量类别
    Mob_VitalSignItem 生命体征指标
 
-
+   --
+   sp_mob_get_patient

@@ -5,7 +5,11 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -14,11 +18,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.utils.ServiceException;
+import org.ssh.pm.mob.MobConstants;
+import org.ssh.pm.mob.MobUtil;
 import org.ssh.pm.nurse.dao.MeasureTypeDao;
+import org.ssh.pm.nurse.dao.PatientDao;
 import org.ssh.pm.nurse.dao.TimePointDao;
+import org.ssh.pm.nurse.dao.VitalSignDataDao;
 import org.ssh.pm.nurse.dao.VitalSignItemDao;
 import org.ssh.pm.nurse.entity.MeasureType;
+import org.ssh.pm.nurse.entity.Patient;
 import org.ssh.pm.nurse.entity.TimePoint;
+import org.ssh.pm.nurse.entity.VitalSignData;
 import org.ssh.pm.nurse.entity.VitalSignItem;
 
 @Service
@@ -32,6 +42,10 @@ public class VitalSignService {
     private MeasureTypeDao measureTypeDao;
     @Autowired
     private VitalSignItemDao vitalSignItemDao;
+    @Autowired
+    private PatientDao patientDao;
+    @Autowired
+    private VitalSignDataDao vitalSignDataDao;
 
     // 初始化,导入生命体征指标
     public void initData() throws ServiceException {
@@ -361,4 +375,154 @@ public class VitalSignService {
             throw new ServiceException("删除失败");
         }
     }
+
+    public Patient getPatient(String patientId) throws Exception {
+        Patient p = null;
+        try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("patientId", patientId);
+
+            MobUtil.execSp(MobConstants.MOB_SPNAME_GET_PATIENT, map);
+            p = patientDao.findUniqueBy("patientId", patientId);
+
+        } catch (Exception e) {
+            logger.error("getPatient:", e.getMessage());
+            throw new Exception(e);
+        }
+
+        return p;
+
+    }
+
+    public List<VitalSignData> getVitalSignData_all(String patientId, String busDate) throws Exception {
+        List<VitalSignData> list = null;
+        try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("patientId", patientId);
+            map.put("busDate", busDate);
+
+            MobUtil.execSp(MobConstants.MOB_SPNAME_GET_VITALSIGN, map);
+            list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = ", patientId, busDate);
+        } catch (Exception e) {
+            logger.error("getPatient:", e.getMessage());
+            throw new Exception(e);
+        }
+        return list;
+    }
+
+    public List<VitalSignData> getVitalSignData(HttpServletRequest request) throws Exception {
+
+        List<VitalSignData> list = null;
+        String patientId = request.getParameter("patientId");
+        String busDate = request.getParameter("busDate");
+        String itemName = request.getParameter("itemName");
+        String timePoint = request.getParameter("timePoint");
+
+        try {
+
+            if (StringUtils.isBlank(timePoint)) {
+                if (StringUtils.isNotBlank(itemName)) {
+                    list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = and itemName = ? ",
+                            patientId, busDate, itemName);
+                }
+
+            } else {
+                if (StringUtils.isNotBlank(itemName)) {
+                    list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = "
+                            + " and itemName = ? and timePoint = ? ", patientId, busDate, itemName, timePoint);
+                } else {
+                    list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = "
+                            + " and timePoint = ? ", patientId, busDate, timePoint);
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            logger.error("getVitalSignData_one:", e.getMessage());
+            throw new Exception(e);
+        }
+
+        return list;
+
+    }
+
+    //修改后直接提交给his保存,存储过程成功后,把当前记录的state修改为N
+    public void saveVitalSignData(HttpServletRequest request) throws Exception {
+        String patientId = request.getParameter("patientId");
+        String busDate = request.getParameter("busDate");
+        String itemName = request.getParameter("itemName");
+        String timePoint = request.getParameter("timePoint");
+
+        String itemCode = request.getParameter("itemCode");
+        String timeCode = request.getParameter("timeCode");
+        String value1 = request.getParameter("value1");
+        String value2 = request.getParameter("value2");
+        String unit = request.getParameter("unit");
+        String measureTypeCode = request.getParameter("measureTypeCode");
+
+        List<VitalSignData> list = null;
+        VitalSignData entity = null;
+
+        try {
+            VitalSignItem item = vitalSignItemDao.findUniqueBy("itemName", itemName);
+            if (item.getTypeCode().equals(MobConstants.MOB_VITALSIGN_ONE)) {
+                list = vitalSignDataDao.find(
+                        " from Patient where patientId = ? and busDate = " + " and itemName = ?  ", patientId, busDate,
+                        itemName);
+            } else {
+                list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = "
+                        + " and itemName = ? and timePoint = ? ", patientId, busDate, itemName, timePoint);
+            }
+
+            if (list.size() > 0) {
+                entity = list.get(0);
+                entity.setValue1(value1);
+                entity.setValue2(value2);
+                entity.setUnit(unit);
+                entity.setMeasureTypeCode(measureTypeCode);
+                entity.setState(MobConstants.MOB_VITALSIGN_STATE_UPDATE);
+                vitalSignDataDao.save(entity);
+
+            } else {
+                entity = new VitalSignData();
+                entity.setPatientId(patientId);
+                entity.setAddDate(busDate);
+                entity.setItemName(itemName);
+                entity.setTimePoint(timePoint);
+                entity.setItemCode(itemCode);
+                entity.setTimeCode(timeCode);
+                entity.setValue1(value1);
+                entity.setValue2(value2);
+                entity.setUnit(unit);
+                entity.setMeasureTypeCode(measureTypeCode);
+                entity.setState(MobConstants.MOB_VITALSIGN_STATE_UPDATE);
+                vitalSignDataDao.save(entity);
+            }
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("patientId", patientId);
+            map.put("busDate", busDate);
+
+            MobUtil.execSp(MobConstants.MOB_SPNAME_COMMIT_VITALSIGN, map);
+
+            entity.setState(MobConstants.MOB_VITALSIGN_STATE_QUERY);
+            vitalSignDataDao.save(entity);
+
+        } catch (Exception e) {
+            logger.error("saveVitalSignData:", e.getMessage());
+            throw new Exception(e);
+        }
+
+    }
+
+    public List<VitalSignItem> getVitalSignItem(HttpServletRequest request) {
+        String typeCode = request.getParameter("typeCode");
+
+        List<VitalSignItem> list = vitalSignItemDao
+                .find(" from VitalSignItem where typeCode = ? order by id", typeCode);
+        return list;
+
+    }
+
 }

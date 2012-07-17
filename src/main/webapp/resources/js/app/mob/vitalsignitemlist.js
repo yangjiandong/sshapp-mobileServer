@@ -165,7 +165,7 @@ Divo.app.VitalSignItemList = function() {
           entityName : dbo,
           queryFlds : queryFlds,
           searchFlds : searchFlds,
-          packageName : 'pm.mob',
+          packageName : 'pm.nurse',
           queryUrl : 'vital_sign/query_vitalsign_item',
           deleteUrl : 'vital_sign/delete_vitalsign_item',
           jsonId : 'id',

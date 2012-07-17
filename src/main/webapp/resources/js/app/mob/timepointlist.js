@@ -117,7 +117,7 @@ Divo.app.TimePointList = function() {
           entityName : dbo,
           queryFlds : queryFlds,
           searchFlds : searchFlds,
-          packageName : 'pm.mob',
+          packageName : 'pm.nurse',
           queryUrl : 'vital_sign/query_time_point',
           deleteUrl : 'vital_sign/delete_time_point',
           jsonId : 'id',

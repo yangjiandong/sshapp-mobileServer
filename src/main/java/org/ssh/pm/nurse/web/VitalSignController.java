@@ -200,7 +200,8 @@ public class VitalSignController {
     }
 
     @RequestMapping("/get_patient")
-    public void getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public @ResponseBody
+    Map<String, Object> getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
 
@@ -214,7 +215,7 @@ public class VitalSignController {
             if (p != null) {
                 map.put("success", true);
                 map.put("message", "");
-                map.put("Patient", p);
+                map.put("patient", p);
             } else {
                 map.put("success", false);
                 map.put("message", "病人信息不存在");
@@ -224,14 +225,13 @@ public class VitalSignController {
             map.put("success", false);
             map.put("message", e.getMessage());
         }
-        JSONResponseUtil.buildCustomJSONDataResponse(response, map);
+        return map;
     }
 
     @RequestMapping("/get_vitalsign_data_all")
     public @ResponseBody
     Map<String, Object> getVitalSignData_all(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
 
         try {
             String patientId = request.getParameter("patientId");
@@ -240,7 +240,7 @@ public class VitalSignController {
             if (list != null && list.size() > 0) {
                 map.put("success", true);
                 map.put("message", "");
-                map.put("VitalSignData", list);
+                map.put("vitalSignData", list);
             }
 
         } catch (Exception e) {
@@ -254,15 +254,18 @@ public class VitalSignController {
     public @ResponseBody
     Map<String, Object> getVitalSignData_one(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
 
+        String patientId = request.getParameter("patientId");
+        String busDate = request.getParameter("busDate");
+        String itemName = request.getParameter("itemName");
+        String timePoint = request.getParameter("timePoint");
         try {
 
-            List<VitalSignData> list = vitalSignService.getVitalSignData(request);
+            List<VitalSignData> list = vitalSignService.getVitalSignData(patientId, busDate, itemName, timePoint);
             if (list != null && list.size() > 0) {
                 map.put("success", true);
                 map.put("message", "");
-                map.put("VitalSignData", list);
+                map.put("vitalSignData", list);
             }
 
         } catch (Exception e) {
@@ -276,11 +279,23 @@ public class VitalSignController {
     public @ResponseBody
     Map<String, Object> saveVitalSignData(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+
+        String patientId = request.getParameter("patientId");
+        String busDate = request.getParameter("busDate");
+        String itemName = request.getParameter("itemName");
+        String timePoint = request.getParameter("timePoint");
+
+        String itemCode = request.getParameter("itemCode");
+        String timeCode = request.getParameter("timeCode");
+        String value1 = request.getParameter("value1");
+        String value2 = request.getParameter("value2");
+        String unit = request.getParameter("unit");
+        String measureTypeCode = request.getParameter("measureTypeCode");
 
         try {
 
-            vitalSignService.saveVitalSignData(request);
+            vitalSignService.saveVitalSignData(patientId, busDate, itemName, timePoint, itemCode, timeCode, value1,
+                    value2, unit, measureTypeCode);
 
             map.put("success", true);
             map.put("message", "");
@@ -297,11 +312,12 @@ public class VitalSignController {
     Map<String, Object> getVitalSignItem(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         List<VitalSignItem> data = null;
+        String typeCode = request.getParameter("typeCode");
         try {
-            data = vitalSignService.getVitalSignItem(request);
+            data = vitalSignService.getVitalSignItem(typeCode);
             map.put("success", true);
             map.put("message", "");
-            map.put("VitalSignItem", data);
+            map.put("vitalSignItem", data);
 
         } catch (Exception e) {
             map.put("success", false);
@@ -310,4 +326,41 @@ public class VitalSignController {
         return map;
     }
 
+    @RequestMapping("/get_timepoint")
+    public @ResponseBody
+    Map<String, Object> getTimePoint(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<TimePoint> data = null;
+        try {
+            data = vitalSignService.queryTimePoint();
+            map.put("success", true);
+            map.put("message", "");
+            map.put("timePoint", data);
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+
+    }
+
+    @RequestMapping("/get_measuretype")
+    public @ResponseBody
+    Map<String, Object> getMeasureType(ModelMap map, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+        List<MeasureType> data = null;
+        try {
+            data = vitalSignService.queryMeasureType();
+            map.put("success", true);
+            map.put("message", "");
+            map.put("measureType", data);
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+    }
 }

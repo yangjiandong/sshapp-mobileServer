@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -410,13 +408,10 @@ public class VitalSignService {
         return list;
     }
 
-    public List<VitalSignData> getVitalSignData(HttpServletRequest request) throws Exception {
+    public List<VitalSignData> getVitalSignData(String patientId, String busDate, String itemName, String timePoint)
+            throws Exception {
 
         List<VitalSignData> list = null;
-        String patientId = request.getParameter("patientId");
-        String busDate = request.getParameter("busDate");
-        String itemName = request.getParameter("itemName");
-        String timePoint = request.getParameter("timePoint");
 
         try {
 
@@ -448,18 +443,8 @@ public class VitalSignService {
     }
 
     //修改后直接提交给his保存,存储过程成功后,把当前记录的state修改为N
-    public void saveVitalSignData(HttpServletRequest request) throws Exception {
-        String patientId = request.getParameter("patientId");
-        String busDate = request.getParameter("busDate");
-        String itemName = request.getParameter("itemName");
-        String timePoint = request.getParameter("timePoint");
-
-        String itemCode = request.getParameter("itemCode");
-        String timeCode = request.getParameter("timeCode");
-        String value1 = request.getParameter("value1");
-        String value2 = request.getParameter("value2");
-        String unit = request.getParameter("unit");
-        String measureTypeCode = request.getParameter("measureTypeCode");
+    public void saveVitalSignData(String patientId, String busDate, String itemName, String timePoint, String itemCode,
+            String timeCode, String value1, String value2, String unit, String measureTypeCode) throws Exception {
 
         List<VitalSignData> list = null;
         VitalSignData entity = null;
@@ -516,9 +501,7 @@ public class VitalSignService {
 
     }
 
-    public List<VitalSignItem> getVitalSignItem(HttpServletRequest request) {
-        String typeCode = request.getParameter("typeCode");
-
+    public List<VitalSignItem> getVitalSignItem(String typeCode) {
         List<VitalSignItem> list = vitalSignItemDao
                 .find(" from VitalSignItem where typeCode = ? order by id", typeCode);
         return list;

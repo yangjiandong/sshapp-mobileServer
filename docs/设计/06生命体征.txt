@@ -36,3 +36,32 @@
 
    --
    sp_mob_get_patient
+   sp_mob_get_vitalsign
+   sp_mob_commit_vitalsign
+
+
+手机客户端调用的请求
+--------------------
+
+   1. 保存生命体征
+   /vital_sign/save_vitalsign_data
+
+   2. 查询一个病人
+   /vital_sign/get_patient
+
+   3. 查询一个病人一天一个指标的记录(如果是一日多次的指标,则是某个时间点的记录)
+   /vital_sign/get_vitalsign_data
+
+   4. 查询一个病人一天的所有生命体征
+   /vital_sign/get_vitalsign_data_all
+
+   5. 查询某一类生命体征指标
+   /vital_sign/get_vitalsign_item
+
+   6. 查询时间点
+   /vital_sign/get_timepoint
+
+   7. 查询测量类别
+   /vital_sign/get_measuretype
+
+   --END

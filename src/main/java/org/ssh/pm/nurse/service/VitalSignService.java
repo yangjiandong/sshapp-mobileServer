@@ -384,7 +384,7 @@ public class VitalSignService {
             MobUtil.execSp(MobConstants.MOB_SPNAME_GET_PATIENT, map);
             List<Patient> list = patientDao.find(" from Patient where userId = ? and patientId = ?  ",
                     Long.valueOf(userId), patientId);
-                    //1L, "491374");
+            //1L, "491374");
             if (list.size() > 0)
                 p = list.get(0);
 
@@ -515,9 +515,11 @@ public class VitalSignService {
     }
 
     public List<VitalSignItem> getVitalSignItem(String typeCode) {
-        List<VitalSignItem> list = vitalSignItemDao
-                .find(" from VitalSignItem where typeCode = ? order by id", typeCode);
-        return list;
+        if (org.apache.commons.lang3.StringUtils.isBlank(typeCode)) {
+            return vitalSignItemDao.find(" from VitalSignItem order ");
+        } else {
+            return vitalSignItemDao.find(" from VitalSignItem where typeCode = ? order by id", typeCode);
+        }
 
     }
 

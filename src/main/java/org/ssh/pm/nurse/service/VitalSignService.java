@@ -71,14 +71,14 @@ public class VitalSignService {
                 if (star[0].trim().equals(""))
                     continue;
 
-                if (vitalSignItemDao.findUniqueBy("name", star[0].trim()) != null)
+                if (vitalSignItemDao.findUniqueBy("name", star[1].trim()) != null)
                     continue;
 
                 re = new VitalSignItem();
-                re.setName(star[0].trim());
                 re.setCode(star[0].trim());
-                re.setUnit(star[1].trim());
-                re.setTypeCode(star[2].trim());
+                re.setName(star[1].trim());
+                re.setUnit(star[2].trim());
+                re.setTypeCode(star[3].trim());
                 this.vitalSignItemDao.save(re);
             }
             initData2();
@@ -374,14 +374,19 @@ public class VitalSignService {
         }
     }
 
-    public Patient getPatient(String patientId) throws Exception {
+    public Patient getPatient(String userId, String patientId) throws Exception {
         Patient p = null;
         try {
             Map<String, Object> map = new HashMap<String, Object>();
+            map.put("userId", Long.valueOf(userId));
             map.put("patientId", patientId);
 
             MobUtil.execSp(MobConstants.MOB_SPNAME_GET_PATIENT, map);
-            p = patientDao.findUniqueBy("patientId", patientId);
+            List<Patient> list = patientDao.find(" from Patient where userId = ? and patientId = ?  ",
+                    Long.valueOf(userId), patientId);
+                    //1L, "491374");
+            if (list.size() > 0)
+                p = list.get(0);
 
         } catch (Exception e) {
             logger.error("getPatient:", e.getMessage());
@@ -392,15 +397,17 @@ public class VitalSignService {
 
     }
 
-    public List<VitalSignData> getVitalSignData_all(String patientId, String busDate) throws Exception {
+    public List<VitalSignData> getVitalSignData_all(String userId, String patientId, String busDate) throws Exception {
         List<VitalSignData> list = null;
         try {
             Map<String, Object> map = new HashMap<String, Object>();
+            map.put("userId", Long.valueOf(userId));
             map.put("patientId", patientId);
             map.put("busDate", busDate);
 
             MobUtil.execSp(MobConstants.MOB_SPNAME_GET_VITALSIGN, map);
-            list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = ", patientId, busDate);
+            list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = ? ",
+                    Long.valueOf(userId), patientId, busDate);
         } catch (Exception e) {
             logger.error("getPatient:", e.getMessage());
             throw new Exception(e);
@@ -408,8 +415,8 @@ public class VitalSignService {
         return list;
     }
 
-    public List<VitalSignData> getVitalSignData(String patientId, String busDate, String itemName, String timePoint)
-            throws Exception {
+    public List<VitalSignData> getVitalSignData(String userId, String patientId, String busDate, String itemName,
+            String timePoint) throws Exception {
 
         List<VitalSignData> list = null;
 
@@ -417,17 +424,19 @@ public class VitalSignService {
 
             if (StringUtils.isBlank(timePoint)) {
                 if (StringUtils.isNotBlank(itemName)) {
-                    list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = and itemName = ? ",
-                            patientId, busDate, itemName);
+                    list = vitalSignDataDao.find(
+                            " from Patient where userId = ? and  patientId = ? and busDate = ? and itemName = ? ",
+                            Long.valueOf(userId), patientId, busDate, itemName);
                 }
 
             } else {
                 if (StringUtils.isNotBlank(itemName)) {
-                    list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = "
-                            + " and itemName = ? and timePoint = ? ", patientId, busDate, itemName, timePoint);
+                    list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = ? "
+                            + " and itemName = ? and timePoint = ? ", Long.valueOf(userId), patientId, busDate,
+                            itemName, timePoint);
                 } else {
-                    list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = "
-                            + " and timePoint = ? ", patientId, busDate, timePoint);
+                    list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = ? "
+                            + " and timePoint = ? ", Long.valueOf(userId), patientId, busDate, timePoint);
 
                 }
 
@@ -443,8 +452,9 @@ public class VitalSignService {
     }
 
     //修改后直接提交给his保存,存储过程成功后,把当前记录的state修改为N
-    public void saveVitalSignData(String patientId, String busDate, String itemName, String timePoint, String itemCode,
-            String timeCode, String value1, String value2, String unit, String measureTypeCode) throws Exception {
+    public void saveVitalSignData(String userId, String patientId, String busDate, String itemName, String timePoint,
+            String itemCode, String timeCode, String value1, String value2, String unit, String measureTypeCode)
+            throws Exception {
 
         List<VitalSignData> list = null;
         VitalSignData entity = null;
@@ -452,16 +462,17 @@ public class VitalSignService {
         try {
             VitalSignItem item = vitalSignItemDao.findUniqueBy("itemName", itemName);
             if (item.getTypeCode().equals(MobConstants.MOB_VITALSIGN_ONE)) {
-                list = vitalSignDataDao.find(
-                        " from Patient where patientId = ? and busDate = " + " and itemName = ?  ", patientId, busDate,
-                        itemName);
+                list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = "
+                        + " and itemName = ?  ", Long.valueOf(userId), patientId, busDate, itemName);
             } else {
-                list = vitalSignDataDao.find(" from Patient where patientId = ? and busDate = "
-                        + " and itemName = ? and timePoint = ? ", patientId, busDate, itemName, timePoint);
+                list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = "
+                        + " and itemName = ? and timePoint = ? ", Long.valueOf(userId), patientId, busDate, itemName,
+                        timePoint);
             }
 
             if (list.size() > 0) {
                 entity = list.get(0);
+                entity.setUserId(Long.valueOf(userId));
                 entity.setValue1(value1);
                 entity.setValue2(value2);
                 entity.setUnit(unit);
@@ -471,6 +482,7 @@ public class VitalSignService {
 
             } else {
                 entity = new VitalSignData();
+                entity.setUserId(Long.valueOf(userId));
                 entity.setPatientId(patientId);
                 entity.setAddDate(busDate);
                 entity.setItemName(itemName);
@@ -486,6 +498,7 @@ public class VitalSignService {
             }
 
             Map<String, Object> map = new HashMap<String, Object>();
+            map.put("userId", Long.valueOf(userId));
             map.put("patientId", patientId);
             map.put("busDate", busDate);
 
@@ -508,4 +521,22 @@ public class VitalSignService {
 
     }
 
+    public List<Patient> getPatientAll(String userId, String deptCode) throws Exception {
+        List<Patient> list = null;
+        try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("userId", Long.valueOf(userId));
+            map.put("deptCode", deptCode);
+
+            MobUtil.execSp(MobConstants.MOB_SPNAME_GET_PATIENT_ALL, map);
+            list = patientDao.find(" from Patient where userId = ? ", Long.valueOf(userId));
+
+        } catch (Exception e) {
+            logger.error("getPatientAll:", e.getMessage());
+            throw new Exception(e);
+        }
+
+        return list;
+
+    }
 }

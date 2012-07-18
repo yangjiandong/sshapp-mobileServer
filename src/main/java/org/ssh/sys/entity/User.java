@@ -59,9 +59,9 @@ public class User extends AuditableEntity implements Serializable {
 
     //his信息
     private String userNo;
-    @ViewField()
+    @ViewField(header = "部门编码", width = 120)
     private String departNo;
-    @ViewField()
+    @ViewField(header = "部门", width = 200)
     private String departName;
     private String title;
     private String job;

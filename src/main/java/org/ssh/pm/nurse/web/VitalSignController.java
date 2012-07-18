@@ -203,13 +203,13 @@ public class VitalSignController {
     public @ResponseBody
     Map<String, Object> getPatient(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
 
         try {
             String patientId = request.getParameter("patientId");
+            String userId = request.getParameter("userId");
             Patient p = null;
             if (StringUtils.isNotBlank(patientId)) {
-                p = vitalSignService.getPatient(patientId);
+                p = vitalSignService.getPatient(userId, patientId);
             }
 
             if (p != null) {
@@ -236,7 +236,8 @@ public class VitalSignController {
         try {
             String patientId = request.getParameter("patientId");
             String busDate = request.getParameter("busDate");
-            List<VitalSignData> list = vitalSignService.getVitalSignData_all(patientId, busDate);
+            String userId = request.getParameter("userId");
+            List<VitalSignData> list = vitalSignService.getVitalSignData_all(userId, patientId, busDate);
             if (list != null && list.size() > 0) {
                 map.put("success", true);
                 map.put("message", "");
@@ -259,9 +260,11 @@ public class VitalSignController {
         String busDate = request.getParameter("busDate");
         String itemName = request.getParameter("itemName");
         String timePoint = request.getParameter("timePoint");
+        String userId = request.getParameter("userId");
         try {
 
-            List<VitalSignData> list = vitalSignService.getVitalSignData(patientId, busDate, itemName, timePoint);
+            List<VitalSignData> list = vitalSignService.getVitalSignData(userId, patientId, busDate, itemName,
+                    timePoint);
             if (list != null && list.size() > 0) {
                 map.put("success", true);
                 map.put("message", "");
@@ -280,6 +283,8 @@ public class VitalSignController {
     Map<String, Object> saveVitalSignData(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
 
+        String userId = request.getParameter("userId");
+
         String patientId = request.getParameter("patientId");
         String busDate = request.getParameter("busDate");
         String itemName = request.getParameter("itemName");
@@ -294,8 +299,8 @@ public class VitalSignController {
 
         try {
 
-            vitalSignService.saveVitalSignData(patientId, busDate, itemName, timePoint, itemCode, timeCode, value1,
-                    value2, unit, measureTypeCode);
+            vitalSignService.saveVitalSignData(userId, patientId, busDate, itemName, timePoint, itemCode, timeCode,
+                    value1, value2, unit, measureTypeCode);
 
             map.put("success", true);
             map.put("message", "");
@@ -356,6 +361,35 @@ public class VitalSignController {
             map.put("success", true);
             map.put("message", "");
             map.put("measureType", data);
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+    }
+
+    @RequestMapping("/get_patient_all")
+    public @ResponseBody
+    Map<String, Object> getPatientAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        try {
+            String deptCode = request.getParameter("deptCode");
+            String userId = request.getParameter("userId");
+            List<Patient> list = null;
+            if (StringUtils.isNotBlank(deptCode)) {
+                list = vitalSignService.getPatientAll(userId, deptCode);
+            }
+
+            if (list != null && list.size() > 0) {
+                map.put("success", true);
+                map.put("message", "");
+                map.put("patients", list);
+            } else {
+                map.put("success", false);
+                map.put("message", "病人信息不存在");
+            }
 
         } catch (Exception e) {
             map.put("success", false);

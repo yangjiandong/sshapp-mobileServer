@@ -19,6 +19,8 @@ public class Patient implements Serializable {
     @ViewField
     private Long id;
     @ViewField
+    private Long userId;
+    @ViewField
     private String patientId;//住院号
     @ViewField
     private String patientName;//病人姓名
@@ -101,6 +103,14 @@ public class Patient implements Serializable {
 
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
 }

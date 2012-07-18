@@ -9,6 +9,7 @@ public class MobConstants {
 
     //存储过程
     public static final String MOB_SPNAME_GET_PATIENT = "sp_mob_get_patient";
+    public static final String MOB_SPNAME_GET_PATIENT_ALL = "sp_mob_get_patient_all";
     public static final String MOB_SPNAME_GET_VITALSIGN = "sp_mob_get_vitalsign";
     public static final String MOB_SPNAME_COMMIT_VITALSIGN = "sp_mob_commit_vitalsign";
 

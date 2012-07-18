@@ -19,6 +19,8 @@ public class VitalSignData implements Serializable {
     @ViewField
     private Long id;
     @ViewField
+    private Long userId;
+    @ViewField
     private String patientId;//住院号
     @ViewField
     private String visitId;//就诊次数
@@ -151,6 +153,14 @@ public class VitalSignData implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
 }

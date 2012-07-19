@@ -406,8 +406,7 @@ public class VitalSignService {
             map.put("busDate", busDate);
 
             MobUtil.execSp(MobConstants.MOB_SPNAME_GET_VITALSIGN, map);
-            list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = ? ",
-                    Long.valueOf(userId), patientId, busDate);
+            list = vitalSignDataDao.find(" from VitalSignData where userId = ?  ", Long.valueOf(userId));
         } catch (Exception e) {
             logger.error("getPatient:", e.getMessage());
             throw new Exception(e);
@@ -425,17 +424,17 @@ public class VitalSignService {
             if (StringUtils.isBlank(timePoint)) {
                 if (StringUtils.isNotBlank(itemName)) {
                     list = vitalSignDataDao.find(
-                            " from Patient where userId = ? and  patientId = ? and busDate = ? and itemName = ? ",
+                            " from VitalSignData where userId = ? and  patientId = ? and busDate = ? and itemName = ? ",
                             Long.valueOf(userId), patientId, busDate, itemName);
                 }
 
             } else {
                 if (StringUtils.isNotBlank(itemName)) {
-                    list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = ? "
+                    list = vitalSignDataDao.find(" from VitalSignData where userId = ? and patientId = ? and busDate = ? "
                             + " and itemName = ? and timePoint = ? ", Long.valueOf(userId), patientId, busDate,
                             itemName, timePoint);
                 } else {
-                    list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = ? "
+                    list = vitalSignDataDao.find(" from VitalSignData where userId = ? and patientId = ? and busDate = ? "
                             + " and timePoint = ? ", Long.valueOf(userId), patientId, busDate, timePoint);
 
                 }
@@ -461,7 +460,7 @@ public class VitalSignService {
 
         try {
             VitalSignItem item = vitalSignItemDao.findUniqueBy("itemName", itemName);
-            if (item.getTypeCode().equals(MobConstants.MOB_VITALSIGN_ONE)) {
+            if (item.getTypeCode().equals(com.ek.mobileapp.model.MobConstants.MOB_VITALSIGN_MORE)) {
                 list = vitalSignDataDao.find(" from Patient where userId = ? and patientId = ? and busDate = "
                         + " and itemName = ?  ", Long.valueOf(userId), patientId, busDate, itemName);
             } else {
@@ -516,7 +515,7 @@ public class VitalSignService {
 
     public List<VitalSignItem> getVitalSignItem(String typeCode) {
         if (org.apache.commons.lang3.StringUtils.isBlank(typeCode)) {
-            return vitalSignItemDao.find(" from VitalSignItem order ");
+            return vitalSignItemDao.find(" from VitalSignItem order by id ");
         } else {
             return vitalSignItemDao.find(" from VitalSignItem where typeCode = ? order by id", typeCode);
         }

@@ -21,6 +21,7 @@ import org.springside.modules.orm.Page;
 import org.springside.modules.orm.PropertyFilter;
 import org.springside.modules.utils.spring.SpringContextHolder;
 import org.ssh.pm.common.utils.AppUtil;
+import org.ssh.pm.common.utils.UtilString;
 import org.ssh.pm.mob.entity.MobLog;
 import org.ssh.pm.mob.service.MobLogService;
 import org.ssh.sys.service.AccountManager;
@@ -89,4 +90,32 @@ public class MobLogController {
         map = AppUtil.buildJSONDataResponse(data.getResult(), (long) data.getTotalCount());
         return map;
     }
+
+    //批量删除
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/deletes")
+    public @ResponseBody
+    Map<String, Object> deletes(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        String ids = request.getParameter("ids");
+        List<String> allIds = UtilString.stringToArrayList(ids, ",");
+        List<Long> allId = new ArrayList<Long>();
+        for (String s : allIds) {
+            allId.add(Long.parseLong(s));
+        }
+
+        try {
+            mobLogService.deletesAll(allId);
+            map.put("success", true);
+            map.put("message", "");
+        } catch (Exception e) {
+            logger.error("", e);
+            map.put("success", false);
+            map.put("message", "删除时服务器端发生异常，删除失败！");
+        }
+
+        return map;
+    }
+
 }

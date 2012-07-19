@@ -22,16 +22,16 @@ public class MobLog implements Serializable {
     private Long id;
     @ViewField()
     private Long userId;
+    @ViewField(header = "类型", width = 50)
+    private String type;
     @ViewField(header = "ip")
     private String netIp;
-    @ViewField(header = "时间",width = 150)
+    @ViewField(header = "时间", width = 150)
     private String createTime;
-    @ViewField(header = "事件", width = 200)
+    @ViewField(header = "事件", width = 100)
     private String event;
     @ViewField(header = "详情", width = 400)
     private String note;
-    @ViewField(header = "类型")
-    private String type;
     @ViewField
     private String from;
 

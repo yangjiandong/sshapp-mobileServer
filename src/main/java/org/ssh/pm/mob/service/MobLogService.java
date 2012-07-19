@@ -1,6 +1,8 @@
 package org.ssh.pm.mob.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -41,5 +43,19 @@ public class MobLogService {
     public Page<MobLog> query(Page<MobLog> page, List<PropertyFilter> filters) {
         Page<MobLog> curPage = mobLogDao.findPage(page, filters);
         return curPage;
+    }
+
+    public void deletesAll(List<Long> ids) {
+
+        try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("ids", ids);
+
+            mobLogDao.batchExecute("delete from MobLog where id in (:ids))", map);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new ServiceException("删除失败");
+        }
     }
 }

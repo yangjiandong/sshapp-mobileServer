@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springside.modules.utils.spring.SpringContextHolder;
-import org.ssh.pm.nurse.service.VitalSignService;
 
 public class MobUtil {
     private static Logger logger = LoggerFactory.getLogger(MobUtil.class);

@@ -16,6 +16,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.ssh.pm.common.utils.JSONResponseUtil;
+import org.ssh.pm.mob.MobConstants;
+import org.ssh.pm.mob.MobUtil;
 import org.ssh.pm.nurse.entity.MeasureType;
 import org.ssh.pm.nurse.entity.Patient;
 import org.ssh.pm.nurse.entity.TimePoint;
@@ -25,6 +27,7 @@ import org.ssh.pm.nurse.service.VitalSignService;
 import org.ssh.pm.orm.hibernate.CustomerContextHolder;
 import org.ssh.sys.web.CommonController;
 
+//生命体征
 @Controller
 @RequestMapping("/vital_sign")
 public class VitalSignController {
@@ -35,16 +38,13 @@ public class VitalSignController {
 
     @RequestMapping("/query_time_point")
     public void queryTimePoint(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
         List<TimePoint> data = vitalSignService.queryTimePoint();
-
         JSONResponseUtil.buildJSONDataResponse(response, data, (long) data.size());
     }
 
     @RequestMapping("/save_time_point")
     public void saveTimePoint(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
         String id = request.getParameter("id");
         String code = request.getParameter("code");
         String name = request.getParameter("name");
@@ -72,15 +72,14 @@ public class VitalSignController {
     @RequestMapping("/delete_time_point")
     public void deleteTimePoint(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
         String id = request.getParameter("id");
         try {
-
             vitalSignService.deleteTimePoint(Long.valueOf(id));
             map.put("success", true);
             map.put("message", "");
 
         } catch (Exception e) {
+            logger.error(e.getMessage());
             map.put("success", false);
             map.put("message", e.getMessage());
         }
@@ -136,6 +135,7 @@ public class VitalSignController {
             map.put("message", "");
 
         } catch (Exception e) {
+            logger.error(e.getMessage());
             map.put("success", false);
             map.put("message", e.getMessage());
         }
@@ -222,6 +222,7 @@ public class VitalSignController {
             }
 
         } catch (Exception e) {
+            logger.error(e.getMessage());
             map.put("success", false);
             map.put("message", e.getMessage());
         }
@@ -258,12 +259,12 @@ public class VitalSignController {
 
         String patientId = request.getParameter("patientId");
         String busDate = request.getParameter("busDate");
-        String itemName = request.getParameter("itemName");
+        String itemCode = request.getParameter("itemCode");
         String timePoint = request.getParameter("timePoint");
         String userId = request.getParameter("userId");
         try {
 
-            List<VitalSignData> list = vitalSignService.getVitalSignData(userId, patientId, busDate, itemName,
+            List<VitalSignData> list = vitalSignService.getVitalSignData(userId, patientId, busDate, itemCode,
                     timePoint);
             if (list != null && list.size() > 0) {
                 map.put("success", true);
@@ -301,6 +302,34 @@ public class VitalSignController {
 
             vitalSignService.saveVitalSignData(userId, patientId, busDate, itemName, timePoint, itemCode, timeCode,
                     value1, value2, unit, measureTypeCode);
+
+            map.put("success", true);
+            map.put("message", "");
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+    }
+
+    @RequestMapping("/commit_his")
+    public @ResponseBody
+    Map<String, Object> commitHis(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        String userId = request.getParameter("userId");
+
+        String patientId = request.getParameter("patientId");
+        String busDate = request.getParameter("busDate");
+
+        try {
+            Map<String, Object> map1 = new HashMap<String, Object>();
+            map1.put("userId", Long.valueOf(userId));
+            map1.put("patientId", patientId);
+            map1.put("busDate", busDate);
+
+            MobUtil.execSp(MobConstants.MOB_SPNAME_COMMIT_VITALSIGN, map1);
 
             map.put("success", true);
             map.put("message", "");

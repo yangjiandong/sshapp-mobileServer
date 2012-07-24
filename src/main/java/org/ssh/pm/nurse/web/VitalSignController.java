@@ -20,6 +20,7 @@ import org.ssh.pm.mob.MobConstants;
 import org.ssh.pm.mob.MobUtil;
 import org.ssh.pm.nurse.entity.MeasureType;
 import org.ssh.pm.nurse.entity.Patient;
+import org.ssh.pm.nurse.entity.SkinTest;
 import org.ssh.pm.nurse.entity.TimePoint;
 import org.ssh.pm.nurse.entity.VitalSignData;
 import org.ssh.pm.nurse.entity.VitalSignItem;
@@ -262,15 +263,13 @@ public class VitalSignController {
         String itemCode = request.getParameter("itemCode");
         String timePoint = request.getParameter("timePoint");
         String userId = request.getParameter("userId");
+        List<VitalSignData> list = null;
         try {
+            list = vitalSignService.getVitalSignData(userId, patientId, busDate, itemCode, timePoint);
 
-            List<VitalSignData> list = vitalSignService.getVitalSignData(userId, patientId, busDate, itemCode,
-                    timePoint);
-            if (list != null && list.size() > 0) {
-                map.put("success", true);
-                map.put("message", "");
-                map.put("vitalSignData", list);
-            }
+            map.put("success", true);
+            map.put("message", "");
+            map.put("vitalSignData", list);
 
         } catch (Exception e) {
             map.put("success", false);
@@ -419,6 +418,80 @@ public class VitalSignController {
                 map.put("success", false);
                 map.put("message", "病人信息不存在");
             }
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+    }
+
+    @RequestMapping("/query_skintest")
+    public void querySkinTest(ModelMap map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+        List<SkinTest> data = vitalSignService.querySkinTest();
+
+        JSONResponseUtil.buildJSONDataResponse(response, data, (long) data.size());
+    }
+
+    @RequestMapping("/save_skintest")
+    public void saveSkinTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+        String id = request.getParameter("id");
+        String code = request.getParameter("code");
+        String name = request.getParameter("name");
+
+        try {
+
+            String error = vitalSignService.validSkinTest(id, code, name);
+            if (error.length() == 0) {
+                vitalSignService.saveSkinTest(id, code, name);
+                map.put("success", true);
+                map.put("message", "");
+            } else {
+                map.put("success", false);
+                map.put("message", error);
+            }
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        JSONResponseUtil.buildCustomJSONDataResponse(response, map);
+    }
+
+    @RequestMapping("/delete_skintest")
+    public void deleteSkinTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+        String id = request.getParameter("id");
+        try {
+
+            vitalSignService.deleteSkinTest(Long.valueOf(id));
+            map.put("success", true);
+            map.put("message", "");
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        JSONResponseUtil.buildCustomJSONDataResponse(response, map);
+    }
+
+    @RequestMapping("/get_skintest")
+    public @ResponseBody
+    Map<String, Object> getSkinTest(ModelMap map, HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        CustomerContextHolder.setCustomerType(CommonController.getUserCurrentPartDB(request));
+        List<SkinTest> data = null;
+        try {
+            data = vitalSignService.querySkinTest();
+            map.put("success", true);
+            map.put("message", "");
+            map.put("skinTest", data);
 
         } catch (Exception e) {
             map.put("success", false);

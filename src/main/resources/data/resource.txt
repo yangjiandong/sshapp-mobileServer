@@ -17,5 +17,6 @@ resourceId,text,url,leaf,parentId,resourceType,orderNo,state,iconCls,note
 221,时间点定义,UI221,1,22,3,221,1,commCls
 222,测量类型,UI222,1,22,3,222,1,commCls
 223,生命体征指标,UI223,1,22,3,223,1,commCls
+224,皮试,UI224,1,22,3,224,1,commCls
 
 99,用户日志,UI99,1,2,3,99,1,commCls

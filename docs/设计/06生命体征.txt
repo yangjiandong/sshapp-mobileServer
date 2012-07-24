@@ -67,4 +67,17 @@
    8. 查询测量类别
    /vital_sign/get_measuretype
 
+移动客户端取数过程
+------------------
+
+   1. 查询
+
+   病人基本信息
+   GlobalCache.getCache().setCurrentPatient(patient);
+
+   生命体征
+   GlobalCache.getCache().setVitalSignDatas_all(vitalSignDatas);
+
+   GlobalCache.getCache().setVitalSignDatas(vitalSignDatas);
+
    --END

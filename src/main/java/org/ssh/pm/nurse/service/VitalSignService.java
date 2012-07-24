@@ -20,11 +20,13 @@ import org.ssh.pm.mob.MobConstants;
 import org.ssh.pm.mob.MobUtil;
 import org.ssh.pm.nurse.dao.MeasureTypeDao;
 import org.ssh.pm.nurse.dao.PatientDao;
+import org.ssh.pm.nurse.dao.SkinTestDao;
 import org.ssh.pm.nurse.dao.TimePointDao;
 import org.ssh.pm.nurse.dao.VitalSignDataDao;
 import org.ssh.pm.nurse.dao.VitalSignItemDao;
 import org.ssh.pm.nurse.entity.MeasureType;
 import org.ssh.pm.nurse.entity.Patient;
+import org.ssh.pm.nurse.entity.SkinTest;
 import org.ssh.pm.nurse.entity.TimePoint;
 import org.ssh.pm.nurse.entity.VitalSignData;
 import org.ssh.pm.nurse.entity.VitalSignItem;
@@ -38,6 +40,8 @@ public class VitalSignService {
     private TimePointDao timePointDao;
     @Autowired
     private MeasureTypeDao measureTypeDao;
+    @Autowired
+    private SkinTestDao skinTestDao;
     @Autowired
     private VitalSignItemDao vitalSignItemDao;
     @Autowired
@@ -166,10 +170,52 @@ public class VitalSignService {
                 re.setName(star[1].trim());
                 this.measureTypeDao.save(re);
             }
+            initData4();
         } catch (Exception e) {
             logger.error("str[]:" + StringUtils.join(star, ","));
             logger.error("装载生命体征测量类别数据出错:" + e);
             throw new ServiceException("导入生命体征测量类别时，服务器发生异常");
+        } finally {
+
+        }
+    }
+
+    public void initData4() throws ServiceException {
+        // 判断新增
+        logger.debug("开始装载皮试初始数据");
+
+        File resourcetxt = new File(this.getClass().getResource("/data/skintest.txt").getFile());
+        String star[] = {};
+        try {
+            FileInputStream fis = new FileInputStream(resourcetxt);
+            String thisLine;
+
+            DataInputStream myInput = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(myInput, "UTF-8"));
+
+            SkinTest re;
+            int line = 1;
+            while ((thisLine = br.readLine()) != null) {
+                // 第一行是标题
+                if (line == 1) {
+                    line++;
+                    continue;
+                }
+                star = thisLine.split(",");
+                if (star[0].trim().equals(""))
+                    continue;
+
+                if (skinTestDao.findUniqueBy("name", star[1].trim()) != null)
+                    continue;
+                re = new SkinTest();
+                re.setCode(star[0].trim());
+                re.setName(star[1].trim());
+                this.skinTestDao.save(re);
+            }
+        } catch (Exception e) {
+            logger.error("str[]:" + StringUtils.join(star, ","));
+            logger.error("装载皮试数据出错:" + e);
+            throw new ServiceException("导入皮试时，服务器发生异常");
         } finally {
 
         }
@@ -476,8 +522,16 @@ public class VitalSignService {
             if (list.size() > 0) {
                 entity = list.get(0);
                 entity.setUserId(Long.valueOf(userId));
-                entity.setValue1(value1);
-                entity.setValue2(value2);
+                if (StringUtils.isBlank(value1)) {
+                    entity.setValue1(null);
+                } else {
+                    entity.setValue1(value1);
+                }
+                if (StringUtils.isBlank(value2)) {
+                    entity.setValue2(null);
+                } else {
+                    entity.setValue2(value2);
+                }
                 entity.setUnit(unit);
                 entity.setMeasureTypeCode(measureTypeCode);
                 entity.setState(MobConstants.MOB_VITALSIGN_STATE_UPDATE);
@@ -492,9 +546,18 @@ public class VitalSignService {
                 entity.setTimePoint(timePoint);
                 entity.setItemCode(itemCode);
                 entity.setTimeCode(timeCode);
-                entity.setValue1(value1);
-                entity.setValue2(value2);
+                if (StringUtils.isBlank(value1)) {
+                    entity.setValue1(null);
+                } else {
+                    entity.setValue1(value1);
+                }
+                if (StringUtils.isBlank(value2)) {
+                    entity.setValue2(null);
+                } else {
+                    entity.setValue2(value2);
+                }
                 entity.setUnit(unit);
+                entity.setVisitId("1");
                 entity.setMeasureTypeCode(measureTypeCode);
                 entity.setState(MobConstants.MOB_VITALSIGN_STATE_UPDATE);
                 vitalSignDataDao.save(entity);
@@ -533,5 +596,70 @@ public class VitalSignService {
 
         return list;
 
+    }
+
+    public List<SkinTest> querySkinTest() {
+
+        List<SkinTest> list = skinTestDao.getAll();
+        return list;
+
+    }
+
+    @Transactional(readOnly = true)
+    public String validSkinTest(String id, String code, String name) {
+
+        StringBuffer error = new StringBuffer();
+        if (StringUtils.isNotBlank(id)) {
+
+            List<SkinTest> list = skinTestDao
+                    .find(" from SkinTest where id != ? and name = ? ", Long.valueOf(id), name);
+            if (list != null && list.size() > 0)
+                error.append("皮试名称不能重复");
+
+            list = skinTestDao.find(" from SkinTest where id != ? and code = ? ", Long.valueOf(id), code);
+            if (list != null && list.size() > 0)
+                error.append("皮试编号不能重复");
+        } else {
+            List<SkinTest> list = skinTestDao.find(" from SkinTest where name = ? ", name);
+            if (list != null && list.size() > 0)
+                error.append("皮试名称不能重复");
+            list = skinTestDao.find(" from SkinTest where code = ? ", code);
+            if (list != null && list.size() > 0)
+                error.append("皮试编号不能重复");
+        }
+
+        return error.toString();
+    }
+
+    public void saveSkinTest(String id, String code, String name) {
+
+        try {
+            if (StringUtils.isNotBlank(id)) {
+                SkinTest item = skinTestDao.findUniqueBy("id", Long.valueOf(id));
+                item.setName(name);
+                item.setCode(code);
+                skinTestDao.save(item);
+            } else {
+                SkinTest item = new SkinTest();
+                item.setName(name);
+                item.setCode(code);
+                skinTestDao.save(item);
+            }
+        } catch (Exception e) {
+            logger.error("saveItem:", e.getMessage());
+            throw new ServiceException("皮试定义失败");
+        }
+
+    }
+
+    public void deleteSkinTest(Long id) {
+        try {
+
+            skinTestDao.batchExecute("delete from SkinTest where id = ? ", id);
+
+        } catch (Exception e) {
+            logger.error("deleteTimePoint:", e.getMessage());
+            throw new ServiceException("删除失败");
+        }
     }
 }

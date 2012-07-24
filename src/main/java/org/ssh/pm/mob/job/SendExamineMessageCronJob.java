@@ -72,7 +72,7 @@ public class SendExamineMessageCronJob implements Runnable {
             return;
         }
 
-        logger.info("{}开始一次任务。", UtilDateTime.nowDateString("yyyy-MM-dd HH:mm:ss"));
+        //logger.info("{}开始一次任务。", UtilDateTime.nowDateString("yyyy-MM-dd HH:mm:ss"));
         this.sendSMSService.execute();
     }
 

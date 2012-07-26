@@ -1,0 +1,33 @@
+移动端版本管理
+========
+
+需求
+----
+
+   1. 管理移动端版本,自动更新
+
+设计
+----
+
+   1. 移动端程序发布
+
+   controller
+   MobVersionController
+
+   --统一要求发布文件格式为 sshapp-mobileapp_1_b1_2012070823.apk,自动读取版本号1_b1_2012070823
+   2. 移动端读取最新版本和下载
+
+   Common3Controller
+   get_last_deploy
+   downloadFile
+
+
+   3. 移动端
+
+   读取最新版本号,与本地版本
+   ${mymanifest.manifest.android:versionCode}_${mymanifest.manifest.android:versionName}
+   比较
+
+   --注意签名方式,debug时采用了android默认签名,ant release发布时采用了自己定义的签名
+
+   --END

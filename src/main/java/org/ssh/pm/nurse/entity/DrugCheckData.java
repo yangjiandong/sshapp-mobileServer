@@ -1,6 +1,7 @@
 package org.ssh.pm.nurse.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ public class DrugCheckData implements Serializable {
     private Long id;
     private Long userId;
     private String patientId;
+    private String visitId;
     private String orderId;
     private String orderNo;
     private String orderSubNo;
@@ -26,6 +28,7 @@ public class DrugCheckData implements Serializable {
     private String dosage;
     private String useTime;
     private String barCode;
+    private Date addTime;
 
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -111,6 +114,22 @@ public class DrugCheckData implements Serializable {
 
     public void setBarCode(String barCode) {
         this.barCode = barCode;
+    }
+
+    public String getVisitId() {
+        return visitId;
+    }
+
+    public void setVisitId(String visitId) {
+        this.visitId = visitId;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 
 }

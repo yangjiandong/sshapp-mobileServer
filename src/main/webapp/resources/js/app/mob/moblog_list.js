@@ -21,7 +21,6 @@ Divo.app.MobLogList = function() {
     var searchFlds = new Ext.util.MixedCollection();
 
     grid = new Divo.Base.GridView({
-          // autoSelectFirstRow : false,
           gridId : gridEl,
           entityClassName : 'org.ssh.sys.entity.User',
 

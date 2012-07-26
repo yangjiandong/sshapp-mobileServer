@@ -85,6 +85,28 @@ public class DrugCheckController {
         return map;
     }
 
+    @RequestMapping("/query_drugcheck_data")
+    public @ResponseBody
+    Map<String, Object> queryDrugCheckData_all(HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        try {
+            String patientId = request.getParameter("patientId");
+            String userId = request.getParameter("userId");
+            List<DrugCheckData> list = drugCheckService.queryDrugCheckData_all(userId, patientId);
+
+            map.put("success", true);
+            map.put("message", "");
+            map.put("drugCheckData", list);
+
+        } catch (Exception e) {
+            map.put("success", false);
+            map.put("message", e.getMessage());
+        }
+        return map;
+    }
+
     @RequestMapping("/commit_his")
     public @ResponseBody
     Map<String, Object> commitHis(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -96,7 +118,7 @@ public class DrugCheckController {
         try {
             Map<String, Object> map1 = new HashMap<String, Object>();
             map1.put("userId", Long.valueOf(userId));
-            map1.put("userId", deviceId);
+            map1.put("deviceId", deviceId);
             map1.put("type", MobConstants.MOB_WORKLOAD_TYPE_DRUGCHECK);
 
             MobUtil.execSp(MobConstants.MOB_SPNAME_COMMIT_DRUGCHECK, map1);

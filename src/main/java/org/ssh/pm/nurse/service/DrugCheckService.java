@@ -57,9 +57,23 @@ public class DrugCheckService {
             map.put("barCode", barCode);
 
             MobUtil.execSp(MobConstants.MOB_SPNAME_GET_DRUGCHECK, map);
-            list = drugCheckDao.find(" from DrugCheckData where userId = ?  ", Long.valueOf(userId));
+            list = drugCheckDao.find(" from DrugCheckData where userId = ? and patientId = ? order by id desc ",
+                    Long.valueOf(userId), patientId);
         } catch (Exception e) {
             logger.error("getDrugCheckData_all:", e.getMessage());
+            throw new Exception(e);
+        }
+        return list;
+    }
+
+    public List<DrugCheckData> queryDrugCheckData_all(String userId, String patientId) throws Exception {
+        List<DrugCheckData> list = null;
+        try {
+
+            list = drugCheckDao.find(" from DrugCheckData where userId = ? and patientId = ? order by id desc ",
+                    Long.valueOf(userId), patientId);
+        } catch (Exception e) {
+            logger.error("queryDrugCheckData_all:", e.getMessage());
             throw new Exception(e);
         }
         return list;

@@ -8,11 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springside.modules.orm.grid.ViewField;
 
-import com.jalapeno.annotations.Transient;
 
 @Entity
 @Table(name = "Mob_RoleModules")

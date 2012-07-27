@@ -17,8 +17,13 @@
    pm.nurse.web.VitalSignController
    pm.nurse.web.DrugCheckController
 
-
    2. 客户端
+
+   nurse/activity/DrugCheck --> NurseBaseActivity(实现蓝牙、语言功能)
+
+   UIHandler -- 处理蓝牙状态
+   getDataHandler -- 得到蓝牙信息后处理过程
+   commitDataHandler -- 提交数据
 
 
 后台表

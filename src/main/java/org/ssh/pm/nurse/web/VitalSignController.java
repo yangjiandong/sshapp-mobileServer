@@ -240,11 +240,11 @@ public class VitalSignController {
             String busDate = request.getParameter("busDate");
             String userId = request.getParameter("userId");
             List<VitalSignData> list = vitalSignService.getVitalSignData_all(userId, patientId, busDate);
-            if (list != null && list.size() > 0) {
+            //if (list != null && list.size() > 0) {
                 map.put("success", true);
                 map.put("message", "");
                 map.put("vitalSignData", list);
-            }
+            //}
 
         } catch (Exception e) {
             map.put("success", false);

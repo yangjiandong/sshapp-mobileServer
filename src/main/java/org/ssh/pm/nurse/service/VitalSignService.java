@@ -469,6 +469,7 @@ public class VitalSignService {
         try {
 
             if (StringUtils.isBlank(timePoint)) {
+                //一个生命体征
                 if (StringUtils.isNotBlank(itemCode)) {
                     list = vitalSignDataDao
                             .find(" from VitalSignData where userId = ? and  patientId = ? and addDate = ? and itemCode = ? ",
@@ -476,12 +477,14 @@ public class VitalSignService {
                 }
 
             } else {
+                //一个时间点一个生命体征
                 if (StringUtils.isNotBlank(itemCode)) {
                     list = vitalSignDataDao.find(
                             " from VitalSignData where userId = ? and patientId = ? and addDate = ? "
                                     + " and itemCode = ? and timePoint = ? ", Long.valueOf(userId), patientId, busDate,
                             itemCode, timePoint);
                 } else {
+                    //一个时间点所有生命体征
                     list = vitalSignDataDao.find(
                             " from VitalSignData where userId = ? and patientId = ? and addDate = ? "
                                     + " and timePoint = ? ", Long.valueOf(userId), patientId, busDate, timePoint);

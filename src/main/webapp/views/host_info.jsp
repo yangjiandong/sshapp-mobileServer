@@ -64,6 +64,7 @@ $(function(){if($.browser.msie&&parseInt($.browser.version,10)===6){$('.row div[
 </head>
 
 <body>
-鑫亿移动平台
+<h2>${home}</h2>
+<a href="<c:url value='/common/downloadFile'/>">最新程序${lastVersion}</a>
 </body>
 </html>

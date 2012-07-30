@@ -994,10 +994,4 @@ public class Common2Controller {
 
         return map;
     }
-
-    //返回给手机客户端信息
-    @RequestMapping("/host_info")
-    public String manage(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return "host_info";
-    }
 }

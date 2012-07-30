@@ -26,7 +26,7 @@ import org.ssh.pm.common.log.LogAction;
 import org.ssh.pm.mob.entity.MobVersion;
 import org.ssh.pm.mob.service.AutoRunSetupService;
 import org.ssh.pm.mob.service.MobVersionService;
-import org.ssh.pm.orm.hibernate.CustomerContextHolder;
+import org.ssh.sys.service.AppSetupService;
 import org.ssh.sys.web.CommonController;
 import org.ssh.sys.web.CommonController.Bean;
 
@@ -42,6 +42,8 @@ public class Common3Controller {
     private AutoRunSetupService autoRunSetupService;
     @Autowired
     MobVersionService mobVersionService;
+    @Autowired
+    AppSetupService appSetupService;
 
     @RequestMapping("/init3")
     public @ResponseBody
@@ -80,6 +82,19 @@ public class Common3Controller {
         return map;
     }
 
+    //返回给手机客户端信息
+    @RequestMapping("/host_info")
+    public String manage(Map<String, Object> map,HttpServletRequest request, HttpServletResponse response) throws Exception {
+        //user_Hospital.Info
+        String info = appSetupService.getValue("user_Hospital.Info");
+        map.put("home", info);
+
+        String lastVersion = mobVersionService.getLastVersion();
+        map.put("lastVersion", lastVersion);
+
+        return "host_info";
+    }
+
     @RequestMapping("/get_last_deploy")
     public @ResponseBody
     Map<String, Object> getLastDeploy() throws Exception {
@@ -100,7 +115,8 @@ public class Common3Controller {
     public void downloadFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String lastVersion = mobVersionService.getLastVersion();
-        if (org.apache.commons.lang3.StringUtils.isBlank(lastVersion)) return;
+        if (org.apache.commons.lang3.StringUtils.isBlank(lastVersion))
+            return;
         MobVersion mobversion = mobVersionService.findByUnique("version", lastVersion);
 
         String fileName = mobversion.getFileName();

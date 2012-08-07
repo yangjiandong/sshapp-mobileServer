@@ -641,4 +641,30 @@ public class AccountManager {
         System.out.println(DigestUtils.sha1ToHex("12345"));
     }
 
+    @Transactional
+    public Map<String, Object> updateUserPassword(Long userId, String newPwd) throws ServiceException {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean check = true;
+        String msg = "ok";
+
+        try {
+            User user = userDao.findOneBy("id", userId);
+            if (user != null) {
+                String shaPassword = DigestUtils.sha1ToHex(newPwd);
+                user.setPassword(shaPassword);
+                user.setUpdatePwd(CoreConstants.USER_UPDATED_PASSWD);
+                this.userDao.save(user);
+            }
+
+        } catch (Exception e) {
+            logger.error("updateUserPassword:", e);
+            check = false;
+            msg = "修改密码失败";
+        }
+
+        map.put("success", check);
+        map.put("message", msg);
+        return map;
+    }
 }

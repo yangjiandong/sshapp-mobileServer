@@ -18,17 +18,17 @@ public class DrugCheckData implements Serializable {
 
     private static final long serialVersionUID = -5267849046070029169L;
     private Long id;
-    private Long userId;
-    private String patientId;
-    private String visitId;
-    private String orderId;
-    private String orderNo;
-    private String orderSubNo;
-    private String orderText;
-    private String dosage;
-    private String useTime;
-    private String barCode;
-    private Date addTime;
+    private Long userId;//用户id
+    private String patientId;//住院号
+    private String visitId;//就诊次数
+    private String orderId;//医嘱id
+    private String orderNo;//医嘱顺序号
+    private String orderSubNo;//医嘱子顺序号
+    private String orderText;//医嘱内容
+    private String dosage;//用量
+    private String useTime;//使用时间
+    private String barCode;//条码
+    private Date addTime;//操作时间
 
     public String toString() {
         return ToStringBuilder.reflectionToString(this);

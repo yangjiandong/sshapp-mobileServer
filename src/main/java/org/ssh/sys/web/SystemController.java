@@ -859,4 +859,12 @@ public class SystemController {
         re.put("success", su);
         return re;
     }
+
+    @RequestMapping("/update_password")
+    public @ResponseBody
+    Map<String, Object> updatePassword(@RequestParam("userId") Long userId, @RequestParam("newPwd") String newPwd)
+            throws Exception {
+        Map<String, Object> re = accountManager.updateUserPassword(userId, newPwd);
+        return re;
+    }
 }

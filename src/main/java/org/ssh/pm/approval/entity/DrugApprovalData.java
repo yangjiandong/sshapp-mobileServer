@@ -21,7 +21,7 @@ public class DrugApprovalData implements Serializable {
     @ViewField
     private Long id;
     @ViewField
-    private String appNo;//审批编号
+    private Long appNo;//审批编号
     @ViewField
     private String patientId;//住院号
     @ViewField
@@ -32,6 +32,8 @@ public class DrugApprovalData implements Serializable {
     private String sex;//性别
     @ViewField
     private String age;//年龄
+    @ViewField
+    private String chargeType;//医保费别
     @ViewField
     private String bedNo;//床位号
     @ViewField
@@ -57,11 +59,25 @@ public class DrugApprovalData implements Serializable {
     @ViewField
     private String appDate;//申请时间
     @ViewField
+    private String appWho;//申请人
+    @ViewField
+    private String appWhoCode;//申请人代码
+    @ViewField
+    private String receiveWho;//接收人
+    @ViewField
+    private String receiveWhoCode;//接收人代码
+    @ViewField
+    private String receiveDeptName;//接收科室
+    @ViewField
+    private String receiveDeptCode;//接收科室代码
+    @ViewField
     private String dealDate;//审批时间
     @ViewField
     private String dealWho;//审批人
     @ViewField
     private String dealWhoCode;//审批人代码
+    @ViewField
+    private int state;//1未审核,2已审核未提交,3已提交
 
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -77,11 +93,11 @@ public class DrugApprovalData implements Serializable {
         this.id = id;
     }
 
-    public String getAppNo() {
+    public Long getAppNo() {
         return appNo;
     }
 
-    public void setAppNo(String appNo) {
+    public void setAppNo(Long appNo) {
         this.appNo = appNo;
     }
 
@@ -243,6 +259,70 @@ public class DrugApprovalData implements Serializable {
 
     public void setDealWhoCode(String dealWhoCode) {
         this.dealWhoCode = dealWhoCode;
+    }
+
+    public String getAppWho() {
+        return appWho;
+    }
+
+    public void setAppWho(String appWho) {
+        this.appWho = appWho;
+    }
+
+    public String getAppWhoCode() {
+        return appWhoCode;
+    }
+
+    public void setAppWhoCode(String appWhoCode) {
+        this.appWhoCode = appWhoCode;
+    }
+
+    public String getReceiveWho() {
+        return receiveWho;
+    }
+
+    public void setReceiveWho(String receiveWho) {
+        this.receiveWho = receiveWho;
+    }
+
+    public String getReceiveWhoCode() {
+        return receiveWhoCode;
+    }
+
+    public void setReceiveWhoCode(String receiveWhoCode) {
+        this.receiveWhoCode = receiveWhoCode;
+    }
+
+    public String getReceiveDeptName() {
+        return receiveDeptName;
+    }
+
+    public void setReceiveDeptName(String receiveDeptName) {
+        this.receiveDeptName = receiveDeptName;
+    }
+
+    public String getReceiveDeptCode() {
+        return receiveDeptCode;
+    }
+
+    public void setReceiveDeptCode(String receiveDeptCode) {
+        this.receiveDeptCode = receiveDeptCode;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public String getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(String chargeType) {
+        this.chargeType = chargeType;
     }
 
 }

@@ -13,6 +13,8 @@ public class MobConstants {
     public static final String MOB_SPNAME_GET_DRUGCHECK = "sp_mob_drug_check";
     public static final String MOB_SPNAME_COMMIT_DRUGCHECK = "sp_mob_commit_drug_check";
 
+    public static final String MOB_SPNAME_COMMIT_DRUGAPPROVAL = "sp_mob_commit_drug_approval";
+
     public static final String MOB_VITALSIGN_STATE_UPDATE = "Y";
     public static final String MOB_VITALSIGN_STATE_QUERY = "N";
 

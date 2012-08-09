@@ -521,6 +521,7 @@ public class VitalSignService {
                         + " and itemName = ?  ", Long.valueOf(userId), patientId, busDate, item.getName());
 
             }
+            TimePoint tp = timePointDao.findUniqueBy("name", timePoint);
 
             if (list.size() > 0) {
                 entity = list.get(0);
@@ -548,7 +549,7 @@ public class VitalSignService {
                 entity.setItemName(item.getName());
                 entity.setTimePoint(timePoint);
                 entity.setItemCode(itemCode);
-                entity.setTimeCode(timeCode);
+                entity.setTimeCode(tp.getCode());
                 if (StringUtils.isBlank(value1)) {
                     entity.setValue1(null);
                 } else {

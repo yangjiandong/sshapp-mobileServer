@@ -19,6 +19,10 @@ resourceId,text,url,leaf,parentId,resourceType,orderNo,state,iconCls,note
 223,生命体征指标,UI223,1,22,3,223,1,commCls
 224,皮试,UI224,1,22,3,224,1,commCls
 
+23,移动审批,,0,2,2,23,1,sysCls
+231,用药审批备注,UI231,1,23,3,231,1,commCls
+232,手术审批备注,UI232,1,23,3,232,1,commCls
+
 29,管理,,0,2,2,29,1,sysCls
 291,用户日志,UI991,1,29,3,291,1,commCls
 292,版本管理,UI992,1,29,3,292,1,commCls

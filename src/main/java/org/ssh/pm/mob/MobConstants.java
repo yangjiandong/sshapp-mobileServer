@@ -3,6 +3,9 @@ package org.ssh.pm.mob;
 public class MobConstants {
 
     public static final String MOB_QUERY = "01";//全院概况
+    public static final String MOB_DRUGAPPR = "04";//用药审批
+    public static final String MOB_OPERAPPR = "05";//手术审批
+    public static final String MOB_DANGER = "06";//危机值
 
     //存储过程
     public static final String MOB_SPNAME_GET_PATIENT = "sp_mob_get_patient";

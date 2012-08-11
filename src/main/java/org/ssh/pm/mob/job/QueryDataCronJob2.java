@@ -19,6 +19,7 @@ import org.springframework.util.Assert;
 import org.springside.modules.utils.ThreadUtils;
 import org.springside.modules.utils.UtilDateTime;
 import org.springside.modules.utils.spring.SpringContextHolder;
+import org.ssh.pm.approval.service.ApprovalService;
 import org.ssh.pm.enums.CoreConstants;
 import org.ssh.pm.mob.dao.CronTypeDao;
 import org.ssh.pm.mob.dao.ItemSourceDao;
@@ -36,6 +37,8 @@ public class QueryDataCronJob2 implements Runnable {
 
     @Autowired
     AutoRunSetupService autoRunSetupService;
+    @Autowired
+    ApprovalService approvalService;
 
     private String cronExpression;
     private int shutdownTimeout = Integer.MAX_VALUE;
@@ -81,6 +84,8 @@ public class QueryDataCronJob2 implements Runnable {
             String spName = a.getSpName();
             try {
                 execOne(spName);
+
+                approvalService.sendMessage(a.getTypeCode());
 
                 AutoRunLog entity = new AutoRunLog();
                 entity.setItemId(a.getItemId());

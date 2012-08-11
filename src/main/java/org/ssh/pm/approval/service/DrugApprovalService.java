@@ -13,6 +13,7 @@ import org.ssh.pm.approval.dao.ApprovalNoteDao;
 import org.ssh.pm.approval.dao.DrugApprovalDao;
 import org.ssh.pm.approval.entity.ApprovalNote;
 import org.ssh.pm.approval.entity.DrugApprovalData;
+import org.ssh.pm.enums.ApprovalConstants;
 import org.ssh.sys.dao.UserDao;
 import org.ssh.sys.entity.User;
 
@@ -43,6 +44,7 @@ public class DrugApprovalService {
                 entity.setDealWho(user.getUserName());
                 entity.setDealWhoCode(user.getUserNo());
                 entity.setDealDate(drugApprovalDao.getNowString("yyyy-MM-dd HH:mm:ss"));
+                entity.setState(ApprovalConstants.APPROVAL_SAVE);
                 drugApprovalDao.save(entity);
             }
 
@@ -53,9 +55,13 @@ public class DrugApprovalService {
 
     }
 
-    public List<DrugApprovalData> getAll() throws Exception {
+    public List<DrugApprovalData> getAll(String userId) throws Exception {
 
-        List<DrugApprovalData> list = drugApprovalDao.getAll();
+        User user = userDao.findUniqueBy("id", Long.valueOf(userId));
+
+        List<DrugApprovalData> list = drugApprovalDao.find(
+                " from DrugApprovalData where state = ? and (receiveWhoCode = ? or receiveDeptCode = ? )",
+                ApprovalConstants.APPROVAL_GET, user.getUserNo(), user.getDepartNo());
 
         return list;
 
@@ -63,8 +69,8 @@ public class DrugApprovalService {
 
     public DrugApprovalData getOne(String appNo) throws Exception {
         DrugApprovalData data = null;
-        List<DrugApprovalData> list = drugApprovalDao.find(" from DrugApprovalData where appNo = ? ",
-                Long.valueOf(appNo));
+        List<DrugApprovalData> list = drugApprovalDao.find(" from DrugApprovalData where appNo = ? and state = ? ",
+                Long.valueOf(appNo), ApprovalConstants.APPROVAL_GET);
         if (list.size() > 0) {
             data = list.get(0);
         }

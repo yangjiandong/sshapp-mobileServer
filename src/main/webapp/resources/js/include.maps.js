@@ -17,6 +17,10 @@ function initUiDcIncludes(m) {
 
   m.add("UI231", ["app/mob/approvalnotelist.js"]);
   m.add("UI232", ["app/mob/approvalnotelist2.js"]);
+  m.add("UI233", ["app/mob/autorunsetup.class.js",
+          "app/mob/autorunsetup_drug_appr_list.js"]);
+  m.add("UI234", ["app/mob/autorunsetup.class.js",
+          "app/mob/autorunsetup_oper_appr_list.js"]);
 
   m.add("UI991", ["app/mob/moblog_list.js"]);
   m.add("UI992", ["app/mob/mobversion_list.js"]);

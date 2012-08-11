@@ -92,8 +92,9 @@ public class DrugApprovalController {
     Map<String, Object> getAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
 
+        String userId = request.getParameter("userId");
         try {
-            List<DrugApprovalData> list = drugApprovalService.getAll();
+            List<DrugApprovalData> list = drugApprovalService.getAll(userId);
             if (list != null && list.size() > 0) {
                 map.put("success", true);
                 map.put("message", "");

@@ -19,3 +19,5 @@ itemId,itemName,spName,typecode
 11,检验人次,sp_mob_query_jyrc,01
 23,住院收入,sp_mob_query_ylsr_zy,01
 24,门诊收入,sp_mob_query_ylsr_mz,01
+25,用药审核,sp_mob_get_drug_approval,04
+26,手术审核,sp_mob_get_operation_approval,05

@@ -34,6 +34,9 @@ Divo.app.UserForm = Ext.extend(Divo.Base.EditForm, {
           }, {
             name : "dbCodes",
             type : "string"
+          }, {
+            name : "mobileNo",
+            type : "string"
           }]),
       initComponent : function() {
 
@@ -70,6 +73,15 @@ Divo.app.UserForm = Ext.extend(Divo.Base.EditForm, {
                   name : "name",
                   dataIndex : "name",
                   fieldLabel : "姓名",
+                  width : 120,
+                  insert_allowed : true,
+                  update_allowed : true
+                }));
+
+        this.fields.add("mobileNo", new Ext.form.TextField({
+                  name : "mobileNo",
+                  dataIndex : "mobileNo",
+                  fieldLabel : "手机",
                   width : 120,
                   insert_allowed : true,
                   update_allowed : true
@@ -140,10 +152,10 @@ Divo.app.UserForm = Ext.extend(Divo.Base.EditForm, {
                 labelAlign : "right",
                 labelWidth : 80,
                 items : [this.fields.get("id"), this.fields.get("name"),
-                    this.fields.get("loginName"), this.fields.get("password"),
-                    this.fields.get("email"), this.fields.get("fs"),
-                    this.fields.get("version"), this.fields.get("status"),
-                    this.fields.get("dbCodes")]
+                    this.fields.get("loginName"), this.fields.get("mobileNo"),
+                    this.fields.get("password"), this.fields.get("email"),
+                    this.fields.get("fs"), this.fields.get("version"),
+                    this.fields.get("status"), this.fields.get("dbCodes")]
               }],
               bodyStyle : 'padding:10px 0 ;',
               layout : "column",
@@ -167,6 +179,7 @@ Divo.app.UserForm = Ext.extend(Divo.Base.EditForm, {
               loginName : "",
               password : "",
               name : "",
+              mobileNo : "",
               email : "",
               status : "",
               version : "",
@@ -370,6 +383,7 @@ Divo.app.UserList = function() {
           name : data.name,
           loginName : data.loginName,
           password : data.password,
+          mobileNo : data.mobileNo,
           email : data.email,
           status : data.status,
           version : data.version,
@@ -754,6 +768,7 @@ Divo.app.UserList = function() {
     clearSel();
     form.getForm().findField('loginName').setReadOnly(false);
     form.getForm().findField('name').setReadOnly(false);
+    form.getForm().findField('mobileNo').setReadOnly(false);
     form.getForm().findField('email').setReadOnly(false);
   }
 
@@ -772,10 +787,12 @@ Divo.app.UserList = function() {
     if (selModel.getSelected().data.loginName == 'Admin') {
       form.getForm().findField('loginName').setReadOnly(true);
       form.getForm().findField('name').setReadOnly(true);
+      form.getForm().findField('mobileNo').setReadOnly(true);
       form.getForm().findField('email').setReadOnly(true);
     } else {
       form.getForm().findField('loginName').setReadOnly(false);
       form.getForm().findField('name').setReadOnly(false);
+      form.getForm().findField('mobileNo').setReadOnly(false);
       form.getForm().findField('email').setReadOnly(false);
     }
   }

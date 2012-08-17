@@ -21,11 +21,11 @@ public class OperationApprovalData implements Serializable {
     @ViewField
     private Long id;
     @ViewField
-    private String appNo;//审批编号
-    @ViewField
     private String patientId;//住院号
     @ViewField
     private String visitId;//就诊次数
+    @ViewField
+    private String operId;//手术编号
     @ViewField
     private String patientName;//病人姓名
     @ViewField
@@ -43,7 +43,7 @@ public class OperationApprovalData implements Serializable {
     @ViewField
     private String operationName;//手术名称
     @ViewField
-    private String operationStop;//手术等级
+    private String operationStep;//手术等级
     @ViewField
     private String checkOut;//病人费别
     @ViewField
@@ -102,6 +102,17 @@ public class OperationApprovalData implements Serializable {
     private String dealWho;//审批人
     @ViewField
     private String dealWhoCode;//审批人代码
+    @ViewField
+    private int state;//1未审核,2已审核未提交,3已提交
+
+    @ViewField
+    private String appWho;//申请人
+    @ViewField
+    private String appWhoCode;//申请人代码
+    @ViewField
+    private String receiveWho;//接收人
+    @ViewField
+    private String receiveWhoCode;//接收人代码
 
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -197,12 +208,12 @@ public class OperationApprovalData implements Serializable {
         this.operationName = operationName;
     }
 
-    public String getOperationStop() {
-        return operationStop;
+    public String getOperationStep() {
+        return operationStep;
     }
 
-    public void setOperationStop(String operationStop) {
-        this.operationStop = operationStop;
+    public void setOperationStep(String operationStep) {
+        this.operationStep = operationStep;
     }
 
     public String getCheckOut() {
@@ -437,12 +448,52 @@ public class OperationApprovalData implements Serializable {
         this.dealWhoCode = dealWhoCode;
     }
 
-    public String getAppNo() {
-        return appNo;
+    public int getState() {
+        return state;
     }
 
-    public void setAppNo(String appNo) {
-        this.appNo = appNo;
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public String getAppWho() {
+        return appWho;
+    }
+
+    public void setAppWho(String appWho) {
+        this.appWho = appWho;
+    }
+
+    public String getAppWhoCode() {
+        return appWhoCode;
+    }
+
+    public void setAppWhoCode(String appWhoCode) {
+        this.appWhoCode = appWhoCode;
+    }
+
+    public String getReceiveWho() {
+        return receiveWho;
+    }
+
+    public void setReceiveWho(String receiveWho) {
+        this.receiveWho = receiveWho;
+    }
+
+    public String getReceiveWhoCode() {
+        return receiveWhoCode;
+    }
+
+    public void setReceiveWhoCode(String receiveWhoCode) {
+        this.receiveWhoCode = receiveWhoCode;
+    }
+
+    public String getOperId() {
+        return operId;
+    }
+
+    public void setOperId(String operId) {
+        this.operId = operId;
     }
 
 }

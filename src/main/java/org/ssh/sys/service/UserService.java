@@ -146,6 +146,7 @@ public class UserService {
                 old.setName(user.getName());
                 old.setLoginName(user.getLoginName());
                 old.setEmail(user.getEmail());
+                old.setMobileNo(user.getMobileNo());
                 old.setPartDBList(dbs);
                 userDao.save(old);
             }
